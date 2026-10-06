@@ -1,0 +1,199 @@
+#include "pch.h"
+#include "Renderer.h"
+#include "Model.h"
+#include "Math/Transform.h"
+#include "Math/MathUtils.h"
+#include "Texture.h"
+#include "Math/Rect.h"
+
+#include <iostream>
+
+namespace nu
+{
+    bool Renderer::Initialize(const char* name, int width, int height) {
+        SDL_Init(SDL_INIT_VIDEO);
+
+        if (!TTF_Init()) {
+            std::cerr << "TTF_Init Error: " << SDL_GetError() << std::endl;
+            return false;
+        }
+
+        m_window = SDL_CreateWindow(name, width, height, 0);
+        if (m_window == nullptr) {
+            std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
+            SDL_Quit();
+            return false;
+        }
+
+        SDL_GPUShaderFormat formats = SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL;
+        m_gpuDevice = SDL_CreateGPUDevice(formats, true, nullptr);
+        if (!m_gpuDevice) {
+            std::cerr << "Failed to create GPU Device" << SDL_GetError() << std::endl;
+            SDL_DestroyWindow(m_window);
+            SDL_Quit();
+            return false;
+        }
+
+        // Claim the window for our modern GPU Socket
+        SDL_ClaimWindowForGPUDevice(m_gpuDevice, m_window);
+
+        std::cout << "GPU Driver: " << SDL_GetGPUDeviceDriver(m_gpuDevice) << std::endl;
+
+        return true;
+    }
+
+    void Renderer::SetColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)const {
+        SDL_SetRenderDrawColor(m_renderer, r, g, b, a);
+    }
+
+    void Renderer::SetColor(float r, float g, float b, float a)const {
+        SDL_SetRenderDrawColorFloat(m_renderer, r, g ,b ,a);
+	}
+
+    void Renderer::Clear() const {
+        SDL_RenderClear(m_renderer);
+    }
+
+    void Renderer::Present() const {
+        SDL_RenderPresent(m_renderer);
+    }
+
+    bool Renderer::BeginFrame() {
+        m_commandBuffer = SDL_AcquireGPUCommandBuffer(m_gpuDevice);
+        if (!m_commandBuffer)
+        {
+            std::cerr << "Could not acquire command buffer: " << SDL_GetError() << std::endl;
+            return false;
+        }
+
+        SDL_GPUTexture* swapchainTexture = nullptr;
+        if (!SDL_WaitAndAcquireGPUSwapchainTexture(m_commandBuffer, m_window, &swapchainTexture, nullptr, nullptr))
+        {
+            std::cerr << "Could not acquire swapchain texture: " << SDL_GetError() << std::endl;
+            return false;
+        }
+        if (swapchainTexture != nullptr)
+        {
+            // configure the color target attachments (This handles clearing the screen)
+            SDL_GPUColorTargetInfo color_target_info{};
+            color_target_info.texture = swapchainTexture;
+            color_target_info.clear_color = SDL_FColor{ 0.0f, 1.0f, 0.0f, 1.0f };
+            color_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
+            color_target_info.store_op = SDL_GPU_STOREOP_STORE;
+            m_renderPass = SDL_BeginGPURenderPass(m_commandBuffer, &color_target_info, 1, nullptr);
+            SDL_EndGPURenderPass(m_renderPass);
+        }
+        return true;
+	}
+
+    bool Renderer::EndFrame() const {
+        if (!SDL_SubmitGPUCommandBuffer(m_commandBuffer))
+        {
+            std::cerr << "Could not submit command buffer: " << SDL_GetError() << std::endl;
+            return false;
+        }
+        return true;
+    }
+
+    void Renderer::DrawPoint(float x, float y)const {
+        SDL_RenderPoint(m_renderer, x, y);
+    }
+
+    void Renderer::DrawFillRect(float x, float y, float w, float h)const {
+        SDL_FRect rect{ x, y, w, h };
+        SDL_RenderFillRect(m_renderer, &rect);
+
+    }
+    
+    void Renderer::DrawLine(float x1, float y1, float x2, float y2)const {
+        SDL_RenderLine(m_renderer, x1, y1, x2, y2);
+	}
+
+    void Renderer::DrawRect(float x, float y, float w, float h)const {
+        SDL_FRect ret{ x, y, w, h };
+		SDL_RenderRect(m_renderer, &ret);
+    }
+
+
+    void Renderer::DrawTexture(const Texture& texture, float x, float y, float angle, float scale, bool flipH) const{
+
+        if (!texture.m_texture) {
+            std::cerr << "Error: Texture is null or not loaded." << std::endl;
+            return;
+        }
+        
+        Vector2 size = texture.GetSize();
+
+		float cameraX = (m_cameraEnabled) ? (m_camera.x - m_width * 0.5f) : 0.0f;
+		float cameraY = (m_cameraEnabled) ? (m_camera.y - m_height * 0.5f) : 0.0f;
+
+        SDL_FRect destRect;
+        destRect.w = size.x * scale;
+        destRect.h = size.y * scale;
+
+        destRect.x = x - cameraX - (destRect.w * 0.5f);
+        destRect.y = y - cameraY - (destRect.h * 0.5f);
+       
+        SDL_RenderTextureRotated(m_renderer, texture.m_texture, NULL, &destRect, angle, NULL, flipH ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+    }
+
+    void Renderer::DrawTexture(const Texture& texture, const Rect& source, float x, float y, float angle, float scale, bool flipH) const{
+        
+        float cameraX = (m_cameraEnabled) ? (m_camera.x - m_width * 0.5f) : 0.0f;
+        float cameraY = (   m_cameraEnabled) ? (m_camera.y - m_height * 0.5f) : 0.0f;
+        
+        SDL_FRect sourceRect;
+        sourceRect.x = source.x;
+        sourceRect.y = source.y;
+        sourceRect.w = source.w;
+        sourceRect.h = source.h;
+
+
+        SDL_FRect destRect;
+        destRect.w = source.w * scale;
+        destRect.h = source.h * scale;
+
+        destRect.x = (x - cameraX) - (destRect.w * 0.5f);
+        destRect.y = (y - cameraY) - (destRect.h * 0.5f);
+
+       
+        SDL_RenderTextureRotated(m_renderer, texture.m_texture, &sourceRect, &destRect, angle, NULL, flipH ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+    }
+
+
+    void Renderer::DrawModel(const Model& model, const Transform& transform) const
+    {     
+
+        for (const auto& mesh : model.GetMeshes()) {
+			Color color = mesh.GetColor();
+			SetColor(color.r, color.g, color.b, 1.0f);
+
+            auto& points = mesh.GetPoints();
+
+            for (int i = 0; i < (int)points.size() - 1; i++) {
+                Vector2 v1 = points[i];
+                Vector2 v2 = points[i + 1];
+
+
+                v1 *= transform.scale;
+                v2 *= transform.scale;
+
+                v1 = v1.Rotate(transform.rotation * math::DegToRad);
+                v2 = v2.Rotate(transform.rotation * math::DegToRad);
+
+                v1 += transform.position;
+                v2 += transform.position;
+
+                DrawLine(v1.x, v1.y, v2.x, v2.y);
+            }
+        }
+    }
+
+
+    void Renderer::Shutdown() {
+        TTF_Quit();
+        SDL_DestroyRenderer(m_renderer);
+        SDL_DestroyWindow(m_window);
+        SDL_Quit();
+    }
+}

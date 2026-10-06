@@ -1,0 +1,153 @@
+{
+    "actors": [
+        {
+            "type": "Actor",
+            "prototype": false,
+            "name": "Tilemap",
+            "tag": "Ground",
+            "active": true,
+            "persistent": true,
+            "transform": {
+                "position": [ 0.0, 0.0 ],
+                "rotation": 0.0,
+                "scale": 3.0
+            },
+            "components": [
+                {
+                    "type": "TilemapRendererComponent",
+                    "tilemap_name": "Tilemaps/world.json"
+                }
+            ]
+        },
+        {
+            "name": "PlayerPrototype",
+            "tag": "Player",
+            "type": "PlayerController",
+            "prototype": true,
+            "active": true,
+            "damping": 2.0,
+            "speed": 250.0,
+            "velocity": [ 0.0, 0.0 ],
+            "transform": {
+                "position": [ 640.0, 512.0 ],
+                "rotation": 0.0,
+                "scale": 3.0
+            },
+            "components": [
+                {
+                    "type": "SpriteAnimatorRendererComponent",
+                    "default_animation": "idle",
+                    "animations": [
+                        {
+                            "name": "idle",
+                            "texture_frames": "Animations/hero_idle.json",
+                            "frames_per_second": 10.0
+
+                        },
+                        {
+                            "name": "run",
+                            "texture_frames": "Animations/hero_run.json",
+                            "frames_per_second": 10.0
+
+                        }
+                    ]
+                },
+                {
+                    "type": "Box2DPhysicsComponent",
+                    "linear_damping": 2.0,
+                    "angular_damping": 1.0,
+                    "size": [ 48, 48 ],
+                    "shape": "capsule",
+                    "constrain_angle": true,
+                    "gravity_scale": 0.0
+                },
+                {
+                    "type": "PlatformGravityComponent",
+                    "gravity_strength": 600.0,
+                    "level_tag": "Ground"
+
+                }
+            ]
+        },
+        {
+            "name": "EnemyPrototype",
+            "tag": "Enemy",
+            "type": "Enemy",
+            "prototype": true,
+            "active": true,
+            "damping": 300.0,
+            "speed": 100.0,
+            "velocity": [ 0.0, 0.0 ],
+            "transform": {
+                "position": [ 0.0, 0.0 ],
+                "rotation": 0.0,
+                "scale": 1.0
+            },
+            "components": [
+                {
+                    "type": "SpriteAnimatorRendererComponent",
+                    "default_animation": "idle",
+                    "animations": [
+                        {
+                            "name": "idle",
+                            "texture_frames": "Animations/enemy_idle.json",
+                            "frames_per_second": 10.0,
+
+                            "loop": true
+                        },
+                        {
+                            "name": "run",
+                            "texture_frames": "Animations/enemy_run.json",
+                            "frames_per_second": 10.0,
+                            "loop": true
+                        }
+                    ]
+                },
+                {
+                    "type": "Box2DPhysicsComponent",
+                    "linear_damping": 2.0,
+                    "angular_damping": 1.0,
+                    "size": [ 48, 48 ],
+                    "gravity_scale": 0
+                },
+                {
+                    "type": "PlatformGravityComponent",
+                    "gravity_strength": 600.0,
+                    "level_tag": "Ground"
+
+                }
+            ]
+        },
+        {
+            "name": "BulletPrototype",
+            "tag": "PlayerBullet",
+            "type": "Bullet",
+            "prototype": true,
+            "active": true,
+            "lifespan": 2.0,
+            "speed": 800.0,
+            "velocity": [ 0.0, 0.0 ],
+            "transform": {
+                "position": [ 0.0, 0.0 ],
+                "rotation": 0.0,
+                "scale": 1.0
+            },
+            "components": [
+                {
+                    "type": "SpriteRendererComponent",
+                    "texture": "Textures/bullet.png"
+                },
+                {
+                    "type": "Box2DPhysicsComponent",
+                    "linear_damping": 2.0,
+                    "angular_damping": 1.0,
+                    "size": [ 40.0, 40.0 ]
+                },
+                {
+                    "type": "CircleColliderComponent",
+                    "radius": 24.0
+                }
+            ]
+        }
+    ]
+}
