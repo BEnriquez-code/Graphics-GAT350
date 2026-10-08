@@ -3,6 +3,8 @@
 #include "Model.h"
 #include "Math/Transform.h"
 #include "Math/MathUtils.h"
+#include "Pipeline.h"
+#include "VertexBuffer.h"
 #include "Texture.h"
 #include "Math/Rect.h"
 
@@ -58,7 +60,8 @@ namespace nu
         SDL_RenderPresent(m_renderer);
     }
 
-    bool Renderer::BeginFrame() {
+    bool Renderer::BeginFrame()
+    {
         m_commandBuffer = SDL_AcquireGPUCommandBuffer(m_gpuDevice);
         if (!m_commandBuffer)
         {
@@ -66,32 +69,45 @@ namespace nu
             return false;
         }
 
+
         SDL_GPUTexture* swapchainTexture = nullptr;
         if (!SDL_WaitAndAcquireGPUSwapchainTexture(m_commandBuffer, m_window, &swapchainTexture, nullptr, nullptr))
         {
             std::cerr << "Could not acquire swapchain texture: " << SDL_GetError() << std::endl;
             return false;
         }
+
         if (swapchainTexture != nullptr)
         {
             // configure the color target attachments (This handles clearing the screen)
             SDL_GPUColorTargetInfo color_target_info{};
             color_target_info.texture = swapchainTexture;
-            color_target_info.clear_color = SDL_FColor{ 0.0f, 1.0f, 0.0f, 1.0f };
+            color_target_info.clear_color = SDL_FColor{ 0.3f, 0.3f, 0.3f, 1.0f };
             color_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
             color_target_info.store_op = SDL_GPU_STOREOP_STORE;
-            m_renderPass = SDL_BeginGPURenderPass(m_commandBuffer, &color_target_info, 1, nullptr);
-            SDL_EndGPURenderPass(m_renderPass);
-        }
-        return true;
-	}
 
-    bool Renderer::EndFrame() const {
+            m_renderPass = SDL_BeginGPURenderPass(m_commandBuffer, &color_target_info, 1, nullptr);
+        }
+
+        return true;
+    }
+
+    bool Renderer::EndFrame()
+    {
+        if (m_renderPass)
+        {
+            SDL_EndGPURenderPass(m_renderPass);
+            m_renderPass = nullptr;
+        }
+
         if (!SDL_SubmitGPUCommandBuffer(m_commandBuffer))
         {
             std::cerr << "Could not submit command buffer: " << SDL_GetError() << std::endl;
             return false;
         }
+
+        m_commandBuffer = nullptr;
+
         return true;
     }
 
@@ -187,6 +203,55 @@ namespace nu
                 DrawLine(v1.x, v1.y, v2.x, v2.y);
             }
         }
+    }
+
+    void Renderer::SetPipeline(const Pipeline& pipeline)
+    {
+        SDL_BindGPUGraphicsPipeline(m_renderPass, pipeline.m_gpuPipeline);
+        // bind the pipeline to the current render pass with SDL_BindGPUGraphicsPipeline(renderPass, gpuPipeline)
+        // the pipeline sets the shaders and render settings used by the draw calls that follow
+        // use pipeline.GetGPUPipeline() to get the sdl pipeline
+    }
+
+    void Renderer::SetVertexBuffer(const VertexBuffer& vertexBuffer)
+    {
+        // describe which buffer to bind and where to start reading from
+        SDL_GPUBufferBinding binding{
+            .buffer = vertexBuffer.m_gpuBuffer, // todo: the vertex buffer's gpu buffer
+            .offset = 0   // start reading at the beginning of the buffer
+        };
+
+        // bind the vertex buffer to the current render pass with SDL_BindGPUVertexBuffers()
+        // the draw calls that follow read their vertices from this buffer
+        // parameters:
+        //   render pass   - the current render pass (m_renderPass)
+        //   first slot    - 0, matches the buffer slot set in Pipeline::AddVertexBuffer()
+        //   bindings      - pointer to the binding above
+        //   binding count - 1, we are binding one buffer
+        SDL_BindGPUVertexBuffers(
+            m_renderPass,
+            0,
+			&binding,
+            1
+        );
+    }
+
+    void Renderer::Draw(uint32_t vertexCount)
+    {
+        SDL_DrawGPUPrimitives(
+            m_renderPass,
+            vertexCount,
+            1,
+            0,
+            0
+        );
+        // draw using the currently bound pipeline and vertex buffer with SDL_DrawGPUPrimitives()
+        // parameters:
+        //   render pass    - the current render pass (m_renderPass)
+        //   vertex count   - the number of vertices to draw (vertexCount)
+        //   instance count - 1, draw one copy (more than 1 is used for instancing)
+        //   first vertex   - 0, start at the first vertex in the buffer
+        //   first instance - 0, start at the first instance
     }
 
 

@@ -32,6 +32,9 @@
     <ClCompile Include="Renderer\Tilemap.cpp" />
     <ClCompile Include="Serialization\Json.cpp" />
     <ClCompile Include="Components\PlatformGravityComponent.cpp" />
+    <ClCompile Include="Renderer\Shader.cpp" />
+    <ClCompile Include="Renderer\Pipeline.cpp" />
+    <ClCompile Include="Renderer\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
@@ -80,5 +83,8 @@
     <ClInclude Include="Resources\ResourceManager.h" />
     <ClInclude Include="Serialization\Json.h" />
     <ClInclude Include="Components\PlatformGravityComponent.h" />
+    <ClInclude Include="Renderer\Shader.h" />
+    <ClInclude Include="Renderer\Pipeline.h" />
+    <ClInclude Include="Renderer\VertexBuffer.h" />
   </ItemGroup>
 </Project>

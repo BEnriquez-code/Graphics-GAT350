@@ -25,6 +25,9 @@
     <Filter Include="Assets">
       <UniqueIdentifier>{9be99544-fcd2-4984-90bc-757ce2f30044}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{eff2e1ad-b5f0-492a-b9ba-1b3b8cc5cd8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Build\Assets\SpaceGame\Tilemaps\world.json">
@@ -86,5 +89,13 @@
     <ClInclude Include="PlayerController.h">
       <Filter>SpriteGame</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\Shaders\color.frag.hlsl">
+      <Filter>Shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\Shaders\position.vert.hlsl">
+      <Filter>Shaders</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

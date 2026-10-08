@@ -19,7 +19,7 @@ namespace nu
         void Present()const;
 
         bool BeginFrame();
-		bool EndFrame()const;
+		bool EndFrame();
 
         void DrawPoint(float x, float y)const ;
         void DrawFillRect(float x, float y, float w, float h) const;
@@ -39,8 +39,16 @@ namespace nu
         void SetCameraEnabled(bool enabled = true) { m_cameraEnabled = enabled; }
         void SetCamera(const Vector2& camera) { m_camera = camera; }
 
+        SDL_GPUDevice* GetGPUDevice() const { return m_gpuDevice; }
+        SDL_Window* GetWindow() const { return m_window; }
+
+        void SetPipeline(const class Pipeline& pipeline);
+        void SetVertexBuffer(const class VertexBuffer& vertexBuffer);
+        void Draw(uint32_t vertexCount);
+
         friend class Text;
 		friend class Texture;
+        friend class Shader;
 
     private:
         SDL_Window* m_window = nullptr;
