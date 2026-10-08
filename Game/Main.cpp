@@ -38,7 +38,7 @@ int main() {
         SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3,
         offsetof(Vertex, x));
 
-    pipeline->Create(*vshader.get(), *fshader.get(),
+    pipeline->Create(*vshader.get(), *fshader,
         Engine::Get().GetRenderer().GetGPUDevice(),
         Engine::Get().GetRenderer().GetWindow());
 
