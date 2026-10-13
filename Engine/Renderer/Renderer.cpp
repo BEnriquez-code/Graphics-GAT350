@@ -254,6 +254,15 @@ namespace nu
         //   first instance - 0, start at the first instance
     }
 
+    void Renderer::SetVertexUniform(uint32_t slot, const void* data, uint32_t size)
+    {
+        SDL_PushGPUVertexUniformData(m_commandBuffer, slot, data, size);
+    }
+    
+    void Renderer::SetFragmentUniform(uint32_t slot, const void* data, uint32_t size)
+    {
+        SDL_PushGPUFragmentUniformData(m_commandBuffer, slot, data, size);
+    }
 
     void Renderer::Shutdown() {
         TTF_Quit();
