@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "VertexBuffer.h"
+#include "Renderer/Renderer.h"
 
 namespace nu
 {
@@ -12,12 +13,12 @@ namespace nu
 		}
 	}
 
-	bool VertexBuffer::Create(uint32_t vertexCount, uint32_t vertexSize, const uint8_t* data, SDL_GPUDevice* gpuDevice)
+	bool VertexBuffer::Create(uint32_t vertexCount, uint32_t vertexSize, const uint8_t* data, SDL_GPUDevice* gpuDevice, const Renderer& renderer)
 	{
 		// store the vertex count in m_vertexCount (needed later when drawing)
 		// store the gpu device in m_gpuDevice so the destructor can release the buffer later
 		m_vertexCount = vertexCount;
-		m_gpuDevice = gpuDevice;
+		m_gpuDevice = renderer.m_gpuDevice;
 		// calculate the total size in bytes of all the vertices (number of vertices * size of one vertex)
 		uint32_t verticesSize = vertexCount * vertexSize;
 

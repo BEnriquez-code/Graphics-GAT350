@@ -36,11 +36,13 @@ namespace nu
             return false;
         }
 
+
         // Claim the window for our modern GPU Socket
         SDL_ClaimWindowForGPUDevice(m_gpuDevice, m_window);
 
         std::cout << "GPU Driver: " << SDL_GetGPUDeviceDriver(m_gpuDevice) << std::endl;
-
+		SetWidth(width);
+        SetHeight(height);
         return true;
     }
 

@@ -33,6 +33,9 @@ namespace nu
 
         void Shutdown();
 
+		void SetWidth(int width) { m_width = width; }
+		void SetHeight(int height) { m_height = height; }
+
         int GetWidth() const { return m_width; }
         int GetHeight() const { return m_height; }
 
@@ -52,6 +55,7 @@ namespace nu
         friend class Text;
 		friend class Texture;
         friend class Shader;
+		friend class VertexBuffer;
 
     private:
         SDL_Window* m_window = nullptr;
