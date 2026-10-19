@@ -180,34 +180,6 @@ namespace nu
     }
 
 
-    void Renderer::DrawModel(const Model& model, const Transform& transform) const
-    {     
-
-        for (const auto& mesh : model.GetMeshes()) {
-			Color color = mesh.GetColor();
-			SetColor(color.r, color.g, color.b, 1.0f);
-
-            auto& points = mesh.GetPoints();
-
-            for (int i = 0; i < (int)points.size() - 1; i++) {
-                Vector2 v1 = points[i];
-                Vector2 v2 = points[i + 1];
-
-
-                v1 *= transform.scale;
-                v2 *= transform.scale;
-
-                v1 = v1.Rotate(transform.rotation * math::DegToRad);
-                v2 = v2.Rotate(transform.rotation * math::DegToRad);
-
-                v1 += transform.position;
-                v2 += transform.position;
-
-                DrawLine(v1.x, v1.y, v2.x, v2.y);
-            }
-        }
-    }
-
     void Renderer::SetPipeline(const Pipeline& pipeline)
     {
         SDL_BindGPUGraphicsPipeline(m_renderPass, pipeline.m_gpuPipeline);

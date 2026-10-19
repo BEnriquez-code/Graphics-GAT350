@@ -36,9 +36,10 @@ struct Vertex
 
 std::vector<Vertex> vertices =
 {
-    Vertex{ Vector3{ -1.0f, -1.0f, 0.0f}, Color4{1, 0, 0, 1}}, // Bottom-Left
-    Vertex{ Vector3{  1.0f, -1.0f, 0.0f}, Color4{0, 1, 0, 1}}, // Bottom-Right
-    Vertex{ Vector3{  0.0f,  1.0f, 0.0f}, Color4{0, 0, 1, 1}}, // Top-Middle
+    Vertex{ Vector3{ -0.5f, -0.5f, 0.0f}, Color4{1, 0, 0, 1}}, // Bottom-Left
+    Vertex{ Vector3{  0.5f, -0.5f, 0.0f}, Color4{0, 1, 0, 1}}, // Bottom-Right
+    Vertex{ Vector3{  0.5f, 0.5f, 0.0f},  Color4{0, 0, 1, 1}}, //Top-Right
+    Vertex{ Vector3{ -0.5f,  0.5f, 0.0f}, Color4{0, 1, 1, 1}}, // Top-left
 };
 
 std::vector<uint32_t> indices = {0, 1, 2, 2, 3, 0};
@@ -55,8 +56,8 @@ int main() {
     auto ib = std::make_shared<IndexBuffer>();
     ib->Create(indices.size(), indices.data(), Engine::Get().GetRenderer());
 
-    auto vshader = Resources().Get<nu::Shader>("shaders/position.vert", Engine::Get().GetRenderer(), 1);
-    auto fshader = Resources().Get<nu::Shader>("shaders/color.frag", Engine::Get().GetRenderer(), 1);
+    auto vshader = Resources().Get<nu::Shader>("shaders/unlit.vert", Engine::Get().GetRenderer(), 1);
+    auto fshader = Resources().Get<nu::Shader>("shaders/unlit.frag", Engine::Get().GetRenderer(), 1);
 
     auto pipeline = std::make_shared<Pipeline>();
     pipeline->AddVertexBuffer(sizeof(Vertex));
@@ -76,6 +77,8 @@ int main() {
         Engine::Get().GetRenderer().GetWindow());
 
     Color4 color{ 1, 0, 0, 1 };
+
+    Transform transform;
 
     // MAIN LOOP
     bool quit = false;
@@ -109,13 +112,8 @@ int main() {
 
 		cameraPos += direction * dt * 4.0f;
 
-        auto mxt = glm::translate(glm::mat4{1.0f}, glm::vec3(0.0f, 0.0f, 0.0f));
-
-        auto mxr = glm::eulerAngleYXZ(0.0f, 0.0f,3.0f);
-		auto mxs = glm::scale(glm::vec3{ 1 });
-
-		auto model = (mxt * mxr * mxs);
-
+        //Transform
+        transform.rotation.z = time * 10.0f;
 
         //View matrix
         auto view = glm::lookAtRH(cameraPos,cameraPos + glm::vec3{ 0.0f, 0.0f, -1.0f }, glm::vec3{0.0f, 1.0f, 0.0f});
@@ -123,7 +121,8 @@ int main() {
 		float apectRatio = Engine::Get().GetRenderer().GetWidth() / (float)Engine::Get().GetRenderer().GetHeight();
         auto projection = glm::perspective(glm::radians(70.0f), apectRatio,  0.01f, 20.0f);
 
-		uniform.mvp = (projection * view * model);
+        //MVP
+		uniform.mvp = (projection * view * transform.GetMatrix());
 
         Engine::Get().GetRenderer().BeginFrame();
 
