@@ -15,7 +15,7 @@ namespace nu {
         std::string name;
         std::string tag;
         Transform transform;
-        Vector2 velocity{ 0.0f, 0.0f };
+        //Vector2 velocity{ 0.0f, 0.0f };
         float damping{ 0.0f };
         float lifespan{ 0.0f };
         res_t<Model> model;
