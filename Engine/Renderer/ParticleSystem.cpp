@@ -54,7 +54,7 @@ namespace nu {
 				res_t<Texture> activeTexture = particle.texture ? particle.texture : m_texture;
 
 				if (activeTexture) {
-					renderer.DrawTexture(*activeTexture, particle.position.x, particle.position.y);
+					//renderer.DrawTexture(*activeTexture, particle.position.x, particle.position.y);
 				}
 				else {
 					renderer.SetColor(particle.color.r, particle.color.g, particle.color.b, 1.0f);
