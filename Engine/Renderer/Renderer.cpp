@@ -237,6 +237,17 @@ namespace nu
         SDL_PushGPUFragmentUniformData(m_commandBuffer, slot, data, size);
     }
 
+    void Renderer::SetFragmentTexture(uint32_t slot, const Texture& texture)
+    {
+        SDL_GPUTextureSamplerBinding binding
+        {
+            .texture = texture.m_gpuTexture,
+            .sampler = texture.m_gpuSampler
+        };
+
+        SDL_BindGPUFragmentSamplers(m_renderPass, slot, &binding, 1);
+    }
+
     void Renderer::CreateDepthBuffer()
     {
         SDL_GPUTextureCreateInfo depthInfo{
