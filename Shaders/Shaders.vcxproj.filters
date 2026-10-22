@@ -15,5 +15,7 @@
     </FxCompile>
     <FxCompile Include="unlit.frag.hlsl" />
     <FxCompile Include="unlit.vert.hlsl" />
+    <FxCompile Include="lit.frag.hlsl" />
+    <FxCompile Include="lit.vert.hlsl" />
   </ItemGroup>
 </Project>
