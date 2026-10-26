@@ -15,7 +15,10 @@
     </FxCompile>
     <FxCompile Include="unlit.frag.hlsl" />
     <FxCompile Include="unlit.vert.hlsl" />
-    <FxCompile Include="lit.frag.hlsl" />
-    <FxCompile Include="lit.vert.hlsl" />
+    <FxCompile Include="gouraud.frag.hlsl" />
+    <FxCompile Include="gouraud.vert.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lighting.hlsli" />
   </ItemGroup>
 </Project>
