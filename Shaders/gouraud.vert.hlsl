@@ -1,9 +1,11 @@
 #include "Lighting.hlsli"
 
-cbuffer Uniforms : register(b0, space1)
+cbuffer VertexUniforms : register(b0, space1)
 {
     float4x4 mvp;
     float4x4 model;
+    float3 cameraPosition;
+    float padding1;
 }
 
 cbuffer LightUniforms : register(b1, space1)
@@ -38,31 +40,27 @@ Output main(Input input)
     output.position = mul(mvp, float4(input.position, 1.0f));
     
     float3 worldPosiiton = mul(model, float4(input.position, 1.0f)).xyz;
+    float attenuation;
+    float3 L = getLightVector(light, worldPosiiton, attenuation);
+    float3 radiance = light.color * light.intensity;
     
     //DIFFUSE
     float3 N = normalize(mul((float3x3)model, input.normal));
     
-    float3 L;
-    if (light.type == LIGHT_DIRECTIONAL)
-    {
-        L = normalize(-light.direction);
-    }
-    else if(light.type == LIGHT_POINT)
-    {
-        L = normalize(light.posiiton - worldPosiiton);
-    }
-    
     float NdotL = saturate(dot(N, L));
+    float3 diffuse =  radiance * NdotL * attenuation;
     
-    float3 diffuse = light.color * light.intensity * NdotL;
     output.diffuse = light.ambient + diffuse;
     
     //SPECULAR
     output.specular = 0;
     if (NdotL > 0)
     {
-        float3 R = reflect(-L, N);
-
+        //Blin-Phong Specular
+        float3 V = normalize(cameraPosition - worldPosiiton);
+        float3 H = normalize(V + L);
+        float HdotN = saturate(dot(H, N));
+        output.specular = pow(HdotN, material.shininess) * radiance * attenuation;
     }
 
     return output;

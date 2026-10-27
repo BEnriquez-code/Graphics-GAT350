@@ -44,7 +44,6 @@ int main() {
         Engine::Get().GetRenderer().GetGPUDevice(),
         Engine::Get().GetRenderer().GetWindow());
 
-    glm::vec4 color{ 1, 1, 1, 1};
 
     //UNIFORMS
     struct vertexUniform {
@@ -59,29 +58,35 @@ int main() {
         glm::vec3 posiiton;
         LightType type;
         glm::vec3 direction;
-        float paddng1;
+        float innerCutoff;
         glm::vec3 color;
         float intensity;
         glm::vec3 ambient;
-        float paddng2;
+        float outerCutoff;
     };
     LightUniform lightUniform{
         .posiiton{10, 10, 10},
         .type{LightType::Point},
         .direction{0, 1, 0},
+        .innerCutoff{ 0.3f },
         .color{1, 1, 1},
         .intensity{ 1 },
-        .ambient{0.1f}
+        .ambient{0.1f},
+        .outerCutoff{ 0.6f }
     };
 
     struct MaterialUniform {
+        glm::vec4 color;
         glm::vec2 tiling;
         glm::vec2 offset;
+        float shininesss;
     };
 
     MaterialUniform materialUniform{
+        .color{1, 1, 1, 1},
         .tiling{1.0f, 1.0f},
-        .offset{0.0f, 0.0f}
+        .offset{0.0f, 0.0f},
+        .shininesss{ 64.0f }
     };
 
     vertexUniform.cameraPosition = { 0, 0, 5 };
@@ -119,12 +124,17 @@ int main() {
 		if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_S)) direction.z = +1;
 
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_1)) lightUniform.type = LightType::Directional;
-        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_2)) lightUniform.type = LightType::Point;
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_2)) { 
+            lightUniform.type = LightType::Point; 
+            
+        }
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_3)) {
+            lightUniform.type = LightType::Spot;
+            lightUniform.posiiton = glm::vec3{ 0, 0, 0 };
+        }
 
 		vertexUniform.cameraPosition += direction * dt * 4.0f;
-        //materialUniform.offset.x = time;
-        //materialUniform.tiling = glm::vec2{ 2.0f };
-
+        
         //Transform
         transform.rotation.y = time * 30.0f;
         
@@ -145,7 +155,8 @@ int main() {
         Engine::Get().GetRenderer().SetVertexUniform(0, &vertexUniform, sizeof(vertexUniform));
         Engine::Get().GetRenderer().SetVertexUniform(1, &lightUniform, sizeof(lightUniform));
         Engine::Get().GetRenderer().SetVertexUniform(2, &materialUniform, sizeof(materialUniform));
-        Engine::Get().GetRenderer().SetFragmentUniform(0, &color, sizeof(color));
+
+        Engine::Get().GetRenderer().SetFragmentUniform(0, &materialUniform, sizeof(materialUniform));
         Engine::Get().GetRenderer().SetFragmentTexture(0, *texture);
 
         model->Draw(Engine::Get().GetRenderer());
