@@ -68,4 +68,3 @@ cmake --build build
 ├── assets/          # Tilemaps, textures, audio, and other game assets
 └── README.md
 ```
-"# Graphics-GAT350" 
