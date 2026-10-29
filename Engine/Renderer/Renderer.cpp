@@ -57,6 +57,10 @@ namespace nu
         SDL_SetRenderDrawColorFloat(m_renderer, r, g ,b ,a);
 	}
 
+    void Renderer::SetColor(Vector3 color, float a) const {
+        SDL_SetRenderDrawColorFloat(m_renderer, color.r, color.g, color.b, a);
+    }
+
     void Renderer::Clear() const {
         SDL_RenderClear(m_renderer);
     }
@@ -87,7 +91,7 @@ namespace nu
             // configure the color target attachments (This handles clearing the screen)
             SDL_GPUColorTargetInfo color_target_info{};
             color_target_info.texture = swapchainTexture;
-            color_target_info.clear_color = SDL_FColor{ 0.0f, 0.0f, 0.0f, 1.0f };
+            color_target_info.clear_color = SDL_FColor{ 0.2f, 0.2f, 0.2f, 1.0f };
             color_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
             color_target_info.store_op = SDL_GPU_STOREOP_STORE;
 
@@ -200,13 +204,7 @@ namespace nu
 
     void Renderer::Draw(uint32_t vertexCount)
     {
-        SDL_DrawGPUPrimitives(
-            m_renderPass,
-            vertexCount,
-            1,
-            0,
-            0
-        );
+        SDL_DrawGPUPrimitives(m_renderPass, vertexCount, 1, 0, 0);
         // draw using the currently bound pipeline and vertex buffer with SDL_DrawGPUPrimitives()
         // parameters:
         //   render pass    - the current render pass (m_renderPass)

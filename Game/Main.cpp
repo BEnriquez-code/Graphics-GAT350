@@ -15,6 +15,8 @@
 
 #define CHECK_UNIFORM_BOUNDARY(T) static_assert((sizeof(T) % 16) == 0);
 
+#define MAX_LIGHTS 8
+
 using namespace nu;
 enum class LightType : uint32_t {
     Directional,
@@ -56,7 +58,7 @@ int main() {
     CHECK_UNIFORM_BOUNDARY(vertexUniform)
     vertexUniform vertexUniform;
 
-    struct LightUniform {
+    struct Light {
         glm::vec3 posiiton;
         LightType type;
         glm::vec3 direction;
@@ -68,18 +70,44 @@ int main() {
         float range;
         glm::vec3 padding;
     };
-    LightUniform lightUniform{
+
+    struct LightUniform {
+        Light lights[MAX_LIGHTS];
+        uint32_t numLights;
+        glm::vec3 ambient;
+    };
+    CHECK_UNIFORM_BOUNDARY(LightUniform)
+
+    LightUniform lightUniform;
+
+    Light light1{
         .posiiton{10, 10, 10},
         .type{LightType::Point},
-        .direction{0, -1, 0},
+        .direction{0, 1, 0},
         .innerCutoff{ 0.3f },
         .color{1, 1, 1},
         .intensity{ 1 },
         .ambient{0.1f},
         .outerCutoff{ 0.6f },
-        .range{ 400 }
+        .range{ 40 }
     };
-    
+
+    Light light2{
+        .posiiton{-10, 10, 10},
+        .type{LightType::Point},
+        .direction{0, 1, 0},
+        .innerCutoff{ 0.3f },
+        .color{0, 0, 1},
+        .intensity{ 1 },
+        .ambient{0.1f},
+        .outerCutoff{ 0.6f },
+        .range{ 40 }
+    };
+
+    lightUniform.lights[0] = light1;
+    lightUniform.lights[1] = light2;
+    lightUniform.numLights = 2;
+    lightUniform.ambient = glm::vec3{ 0.2f };
 
     struct MaterialUniform {
         glm::vec4 color;
@@ -100,6 +128,7 @@ int main() {
     vertexUniform.cameraPosition = { 0, 0, 5 };
 
     Transform transform;
+    transform.scale = glm::vec3{ 2.0f };
 
     // MAIN LOOP
     bool quit = false;
@@ -131,22 +160,30 @@ int main() {
 		if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_W)) direction.z = -1;
 		if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_S)) direction.z = +1;
 
-        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_1)) lightUniform.type = LightType::Directional;
+        lightUniform.lights[0].posiiton = glm::eulerAngleY(time) * glm::vec4{0, 0, 10, 1};
+        
+
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_1)) { 
+            lightUniform.lights[0].type = LightType::Directional;
+            lightUniform.lights[0].direction = glm::vec3{ 0, 1, 0 };
+        }
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_2)) { 
-            lightUniform.type = LightType::Point; 
-            lightUniform.posiiton = glm::vec3{ 10, 10, 10 };
+            lightUniform.lights[0].type = LightType::Point; 
+            lightUniform.lights[0].posiiton = glm::vec3{ 10, -10, 10 };
+            lightUniform.lights[0].direction = glm::vec3{0, 1, 0};
         }
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_3)) {
-            lightUniform.type = LightType::Spot;
-            lightUniform.posiiton = glm::vec3{ 0, -10, 0 };
-            lightUniform.innerCutoff = glm::cos(glm::radians(10.0f));
-            lightUniform.outerCutoff = glm::cos(glm::radians(15.0f));
+            lightUniform.lights[0].type = LightType::Spot;
+            lightUniform.lights[0].posiiton = glm::vec3{ 0, -10, 0 };
+            lightUniform.lights[0].direction = glm::vec3{0, -1, 0 };
+            lightUniform.lights[0].innerCutoff = glm::cos(glm::radians(10.0f));
+            lightUniform.lights[0].outerCutoff = glm::cos(glm::radians(40.0f));
         }
 
 		vertexUniform.cameraPosition += direction * dt * 4.0f;
         
         //Transform
-        transform.rotation.y = time * 30.0f;
+        //transform.rotation.y = time * 30.0f;
         
 
         //View matrix

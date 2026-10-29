@@ -98,8 +98,8 @@ namespace nu
 	{
 		// describe one attribute of a vertex (ex. position, color, uv)
 		SDL_GPUVertexAttribute attribute{
-			.location = (uint8_t)location, // todo: matches layout(location = x) in the vertex shader
-			.buffer_slot = (uint8_t)0, // all attributes read from the first vertex buffer
+			.location = location, // todo: matches layout(location = x) in the vertex shader
+			.buffer_slot = 0, // all attributes read from the first vertex buffer
 			.format = format, // todo: the data type of the attribute (ex. SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3)
 			.offset = offset // todo: the byte offset of this attribute inside one vertex
 		};
@@ -108,7 +108,4 @@ namespace nu
 		m_vertexAttributes.push_back(attribute);
 	}
 
-	void Pipeline::AddIndexBuffer() {
-		
-	}
 }

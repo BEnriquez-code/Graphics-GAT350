@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math//Vector2.h"
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_image/SDL_image.h>
@@ -14,6 +15,7 @@ namespace nu
 
         void SetColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255)const;
         void SetColor(float r, float g, float b, float a = 1.0f)const;
+        void SetColor(Vector3 color, float a = 1.0f) const;
 
         void Clear()const ;
         void Present()const;
