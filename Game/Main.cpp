@@ -183,7 +183,7 @@ int main() {
 		vertexUniform.cameraPosition += direction * dt * 4.0f;
         
         //Transform
-        //transform.rotation.y = time * 30.0f;
+        transform.rotation.y = time * 30.0f;
         
 
         //View matrix
