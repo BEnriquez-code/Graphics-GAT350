@@ -4,6 +4,7 @@
 #include "Renderer/VertexBuffer.h"
 #include "Renderer/IndexBuffer.h"
 #include "Renderer/Pipeline.h"
+#include "Framework/Scene.h"
 
 #include "Resources/ResourceManager.h"
 
@@ -29,6 +30,10 @@ int main() {
     SetWorkingDirectory("Assets");
 
     Engine::Get().Initialize();
+
+	Scene scene;
+	scene.Load("scenes/scene.json");
+
     auto model = Resources().Get<Model>("models/spot.obj", Engine::Get().GetRenderer());
     auto texture = Resources().Get<Texture>("textures/spot_diffuse.png", Engine::Get().GetRenderer());
 

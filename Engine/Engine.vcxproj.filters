@@ -24,6 +24,10 @@
     <ClCompile Include="Renderer\VertexBuffer.cpp" />
     <ClCompile Include="Renderer\IndexBuffer.cpp" />
     <ClCompile Include="Renderer\Model.cpp" />
+    <ClCompile Include="Components\ModelComponent.cpp" />
+    <ClCompile Include="Components\LightComponent.cpp" />
+    <ClCompile Include="Components\CameraComponent.cpp" />
+    <ClCompile Include="Components\MaterialComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
@@ -64,5 +68,9 @@
     <ClInclude Include="Renderer\VertexBuffer.h" />
     <ClInclude Include="Renderer\IndexBuffer.h" />
     <ClInclude Include="Renderer\Model.h" />
+    <ClInclude Include="Components\ModelComponent.h" />
+    <ClInclude Include="Components\LightComponent.h" />
+    <ClInclude Include="Components\CameraComponent.h" />
+    <ClInclude Include="Components\MaterialComponent.h" />
   </ItemGroup>
 </Project>

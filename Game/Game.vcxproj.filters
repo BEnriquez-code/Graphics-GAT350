@@ -25,19 +25,16 @@
     <Filter Include="Assets">
       <UniqueIdentifier>{9be99544-fcd2-4984-90bc-757ce2f30044}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Scenes">
+      <UniqueIdentifier>{9aa1d6e2-5aad-4b06-ba6b-b4c437585ae2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Build\Assets\SpaceGame\Tilemaps\world.json">
       <Filter>Tilemaps</Filter>
     </None>
-    <None Include="..\Build\Assets\Animations\bat_idle.json">
-      <Filter>Assets</Filter>
-    </None>
-    <None Include="..\Build\Assets\SpaceGame\Data\scene.json">
-      <Filter>Assets</Filter>
-    </None>
-    <None Include="..\Build\Assets\SpaceGame\Data\level.json">
-      <Filter>Assets</Filter>
+    <None Include="..\Build\Assets\scenes\scene.json">
+      <Filter>Assets\Scenes</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
