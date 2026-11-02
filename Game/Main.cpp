@@ -37,8 +37,8 @@ int main() {
     auto model = Resources().Get<Model>("models/spot.obj", Engine::Get().GetRenderer());
     auto texture = Resources().Get<Texture>("textures/spot_diffuse.png", Engine::Get().GetRenderer());
 
-    auto vshader = Resources().Get<nu::Shader>("shaders/phong.vert", Engine::Get().GetRenderer(), 3);
-    auto fshader = Resources().Get<nu::Shader>("shaders/phong.frag", Engine::Get().GetRenderer(), 3, 1);
+    auto vshader = Resources().Get<nu::Shader>("shaders/gouraud.vert", Engine::Get().GetRenderer(), 3);
+    auto fshader = Resources().Get<nu::Shader>("shaders/gouraud.frag", Engine::Get().GetRenderer(), 3, 1);
 
     auto pipeline = std::make_shared<Pipeline>();
 
@@ -87,7 +87,7 @@ int main() {
 
     Light light1{
         .posiiton{10, 10, 10},
-        .type{LightType::Point},
+        .type{LightType::Directional},
         .direction{0, 1, 0},
         .innerCutoff{ 0.3f },
         .color{1, 1, 1},
@@ -102,16 +102,32 @@ int main() {
         .type{LightType::Point},
         .direction{0, 1, 0},
         .innerCutoff{ 0.3f },
-        .color{0, 0, 1},
+        .color{1, 0, 0},
         .intensity{ 1 },
         .ambient{0.1f},
         .outerCutoff{ 0.6f },
         .range{ 40 }
     };
 
+    Light light3{
+        .posiiton{-10, 10, -10},
+        .type{LightType::Point},
+        .direction{0, -1, 0},
+        .innerCutoff{ 0.3f },
+        .color{0, 0, 1},
+        .intensity{ 1 },
+        .ambient{0.1f},
+        .outerCutoff{ 0.6f },
+        .range{ 40 }
+	};
+
+   
+
     lightUniform.lights[0] = light1;
     lightUniform.lights[1] = light2;
-    lightUniform.numLights = 2;
+	lightUniform.lights[2] = light3;
+
+    lightUniform.numLights = 3;
     lightUniform.ambient = glm::vec3{ 0.2f };
 
     struct MaterialUniform {
@@ -165,7 +181,6 @@ int main() {
 		if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_W)) direction.z = -1;
 		if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_S)) direction.z = +1;
 
-        lightUniform.lights[0].posiiton = glm::eulerAngleY(time) * glm::vec4{0, 0, 10, 1};
         
 
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_1)) { 
@@ -188,7 +203,7 @@ int main() {
 		vertexUniform.cameraPosition += direction * dt * 4.0f;
         
         //Transform
-        transform.rotation.y = time * 30.0f;
+        //transform.rotation.y = time * 30.0f;
         
 
         //View matrix
