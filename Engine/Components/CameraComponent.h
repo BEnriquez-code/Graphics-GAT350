@@ -9,6 +9,7 @@ namespace nu
 	public:
 		CLASS_PROTOTYPE(CameraComponent)
 
+		void Start() override;
 		void Update(float dt) override;
 		void Draw(const Renderer& renderer) override;
 
@@ -25,5 +26,6 @@ namespace nu
 		float m_fov{ 70.0f };
 		float m_nearPlane{ 0.001f };
 		float m_farPlane{ 300.0f };
+		float m_aspectRatio{ 1.77f };
 	};
 }

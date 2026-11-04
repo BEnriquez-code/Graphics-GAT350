@@ -28,6 +28,7 @@
     <ClCompile Include="Components\LightComponent.cpp" />
     <ClCompile Include="Components\CameraComponent.cpp" />
     <ClCompile Include="Components\MaterialComponent.cpp" />
+    <ClCompile Include="Components\CameraControllerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
@@ -72,5 +73,6 @@
     <ClInclude Include="Components\LightComponent.h" />
     <ClInclude Include="Components\CameraComponent.h" />
     <ClInclude Include="Components\MaterialComponent.h" />
+    <ClInclude Include="Components\CameraControllerComponent.h" />
   </ItemGroup>
 </Project>
