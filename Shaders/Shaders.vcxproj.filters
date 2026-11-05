@@ -22,5 +22,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Lighting.hlsli" />
+    <None Include="uniforms.hlsli" />
   </ItemGroup>
 </Project>

@@ -17,16 +17,22 @@ struct Material
 
 struct Light
 {
-    float3 posiiton;
+    float3 position;
     uint type;
     float3 direction;
     float innerCutoff;
     float3 color;
     float intensity;
-    float3 ambient;
     float outerCutoff;
     float range;
-    float3 padding;
+    float2 padding;
+};
+
+struct Lights
+{
+    Light lights[MAX_LIGHTS];
+    uint numLights;
+    float3 ambient;
 };
 
 float calculateAttenuation(float distance, float range)
@@ -45,7 +51,7 @@ float3 getLightVector(Light light, float3 position, out float attenuation)
             break;
         case LIGHT_POINT:
             {
-                float3 toLight = light.posiiton - position;
+                float3 toLight = light.position - position;
                 float distance = length(toLight);
                 attenuation = calculateAttenuation(distance, light.range);
                 L = toLight / distance;
@@ -54,7 +60,7 @@ float3 getLightVector(Light light, float3 position, out float attenuation)
         case LIGHT_SPOT:
             {
             
-                float3 toLight = light.posiiton - position;
+                float3 toLight = light.position - position;
                 float distance = length(toLight);
                 L = toLight / distance;
                 attenuation = calculateAttenuation(distance, light.range);

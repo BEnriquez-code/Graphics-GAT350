@@ -74,5 +74,7 @@
     <ClInclude Include="Components\CameraComponent.h" />
     <ClInclude Include="Components\MaterialComponent.h" />
     <ClInclude Include="Components\CameraControllerComponent.h" />
+    <ClInclude Include="Renderer\Uniforms.h" />
+    <ClInclude Include="Renderer\Light.h" />
   </ItemGroup>
 </Project>

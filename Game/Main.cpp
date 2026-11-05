@@ -15,8 +15,6 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/transform.hpp>
 
-#define CHECK_UNIFORM_BOUNDARY(T) static_assert((sizeof(T) % 16) == 0);
-
 #define MAX_LIGHTS 8
 
 using namespace nu;
@@ -35,7 +33,7 @@ int main() {
 	Scene scene;
 	scene.Load("scenes/scene.json");
 
-    auto model = Resources().Get<Model>("models/spot.obj", Engine::Get().GetRenderer());
+    auto model = Resources().Get<Model>("models/dragon.obj", Engine::Get().GetRenderer());
     auto texture = Resources().Get<Texture>("textures/spot_diffuse.png", Engine::Get().GetRenderer());
 
     auto vshader = Resources().Get<nu::Shader>("shaders/phong.vert", Engine::Get().GetRenderer(), 3);
@@ -55,14 +53,14 @@ int main() {
 
 
     //UNIFORMS
-    struct vertexUniform {
+    struct VertexUniform {
         glm::mat4 mvp;
         glm::mat4 model;
         glm::vec3 cameraPosition;
         float padding1;
     };
-    CHECK_UNIFORM_BOUNDARY(vertexUniform)
-    vertexUniform vertexUniform;
+    CHECK_UNIFORM_BOUNDARY(VertexUniform);
+    VertexUniform vertexUniform;
 
     struct Light {
         glm::vec3 posiiton;
@@ -82,7 +80,7 @@ int main() {
         uint32_t numLights;
         glm::vec3 ambient;
     };
-    CHECK_UNIFORM_BOUNDARY(LightUniform)
+    CHECK_UNIFORM_BOUNDARY(LightUniform);
 
     LightUniform lightUniform;
 
@@ -138,7 +136,7 @@ int main() {
         float shininesss;
         glm::vec3 padding;
     };
-    CHECK_UNIFORM_BOUNDARY(MaterialUniform)
+    CHECK_UNIFORM_BOUNDARY(MaterialUniform);
 
     MaterialUniform materialUniform{
         .color{1, 1, 1, 1},
@@ -208,13 +206,13 @@ int main() {
         Engine::Get().GetRenderer().BeginFrame();
 
         Engine::Get().GetRenderer().SetPipeline(*pipeline);
-        Engine::Get().GetRenderer().SetVertexUniform(0, &vertexUniform, sizeof(vertexUniform));
-        Engine::Get().GetRenderer().SetVertexUniform(1, &lightUniform, sizeof(lightUniform));
-        Engine::Get().GetRenderer().SetVertexUniform(2, &materialUniform, sizeof(materialUniform));
+        Engine::Get().GetRenderer().SetVertexUniform(UniformSlot::Object, &vertexUniform, sizeof(vertexUniform));
+        Engine::Get().GetRenderer().SetVertexUniform(UniformSlot::Light, &lightUniform, sizeof(lightUniform));
+        Engine::Get().GetRenderer().SetVertexUniform(UniformSlot::Material, &materialUniform, sizeof(materialUniform));
 
-        Engine::Get().GetRenderer().SetFragmentUniform(0, &vertexUniform, sizeof(vertexUniform));
-        Engine::Get().GetRenderer().SetFragmentUniform(1, &lightUniform, sizeof(lightUniform));
-        Engine::Get().GetRenderer().SetFragmentUniform(2, &materialUniform, sizeof(materialUniform));
+        Engine::Get().GetRenderer().SetFragmentUniform(UniformSlot::Object, &vertexUniform, sizeof(vertexUniform));
+        Engine::Get().GetRenderer().SetFragmentUniform(UniformSlot::Light, &lightUniform, sizeof(lightUniform));
+        Engine::Get().GetRenderer().SetFragmentUniform(UniformSlot::Material, &materialUniform, sizeof(materialUniform));
 
         Engine::Get().GetRenderer().SetFragmentTexture(0, *texture);
 

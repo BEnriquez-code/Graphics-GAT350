@@ -2,7 +2,10 @@
 #include "Scene.h"
 #include "Actor.h"
 #include "Core/Factory.h"
-#include "Components/ColliderComponent.h"
+#include "Renderer/Renderer.h"
+#include "Components/CameraComponent.h"
+#include "Components/LightComponent.h"
+#include "Renderer/Light.h"
 
 
 namespace nu {
@@ -60,7 +63,7 @@ namespace nu {
 		for (auto& actor : m_actors) {
 			actor->Update(dt);
 		}
-		UpdateCollisions();
+		
 		//remove destroyed actors
 		for (auto& actor : m_actors) {
 			if (actor->m_destroyed) actor->OnDestroy();
@@ -77,28 +80,41 @@ namespace nu {
 		m_pendingActors.clear();
 	}
 	void Scene::Draw(const class Renderer& renderer) {
+		FrameUniform frameUniform{};
+
+		auto camera = GetActorByName<Actor>("Camera");
+		if (camera) {
+			auto cameraComponent = camera->GetComponent<CameraComponent>();
+			if (cameraComponent) {
+				frameUniform.cameraPosition = camera->GetTransform().position;
+				frameUniform.view = cameraComponent->GetViewMatrix();
+				frameUniform.projection = cameraComponent->GetProjectionMatrix();
+				frameUniform.viewProjection = frameUniform.projection * frameUniform.view;
+
+				renderer.SetVertexUniform(UniformSlot::Frame, &frameUniform, sizeof(frameUniform));
+				renderer.SetFragmentUniform(UniformSlot::Frame, &frameUniform, sizeof(frameUniform));
+			}
+		}
+
+		LightUniform lightUniform{};
+		auto lights = GetActorByTag<Actor>(("Light"));
+		for (auto light : lights)
+		{
+			auto lightComponent = light->GetComponent<LightComponent>();
+			if (lightComponent)
+			{
+				//lightUniform.lights[lightUniform.numLights++] = lightComponent->GetLightData();
+			}
+		}
+
+		renderer.SetVertexUniform(UniformSlot::Light, &lightUniform, sizeof(lightUniform));
+		renderer.SetFragmentUniform(UniformSlot::Light, &lightUniform, sizeof(lightUniform));
+
+
 		for (const auto& actor : m_actors) {
 			actor->Draw(renderer);
 		}
 
-	}
-
-	void Scene::UpdateCollisions() {
-		for (auto& actorA : m_actors) {
-			for (auto& actorB : m_actors) {
-				if (actorA == actorB || actorA->m_destroyed || actorB->m_destroyed) continue;
-
-				auto colliderA = actorA->GetComponent<ColliderComponent>();
-				auto colliderB = actorB->GetComponent<ColliderComponent>();
-
-				if (!colliderA || !colliderB)continue;
-
-				if (colliderA->CheckCollision(*colliderB)) {
-					actorA->OnCollision(actorB.get());
-					actorB->OnCollision(actorA.get());
-				}
-			}
-		}
 	}
 
 }

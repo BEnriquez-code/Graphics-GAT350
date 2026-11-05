@@ -18,10 +18,8 @@ namespace nu {
 			m_pitch = glm::clamp(m_pitch, -89.0f, 89.0f);
 		}
 
-		//owner->transform.SetRotation(glm::vec3(m_pitch, m_yaw, 0.0f));
+		m_owner->SetRotation(glm::vec3(m_pitch, m_yaw, 0.0f));
 
-		glm::quat q = glm::quat_cast(glm::eulerAngleYXZ(glm::radians(m_yaw), glm::radians(m_pitch), 0.0f));
-		//m_owner->GetTransform().SetRotationQuat(q);
 
 		glm::vec3 direction{ 0 };
 		if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_A)) direction -= m_owner->GetTransform().Right();
@@ -40,5 +38,6 @@ namespace nu {
 	void CameraControllerComponent::Read(const json::value_t& value) {
 		Component::Read(value);
 		JSON_READ_NAME(value, "speed", m_speed);
+		JSON_READ_NAME(value, "sensitivity", m_sensitivity);
 	}
 }
