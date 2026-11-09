@@ -29,6 +29,8 @@
     <ClCompile Include="Components\CameraComponent.cpp" />
     <ClCompile Include="Components\MaterialComponent.cpp" />
     <ClCompile Include="Components\CameraControllerComponent.cpp" />
+    <ClCompile Include="Renderer\Material.cpp" />
+    <ClCompile Include="Renderer\MaterialInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
@@ -76,5 +78,7 @@
     <ClInclude Include="Components\CameraControllerComponent.h" />
     <ClInclude Include="Renderer\Uniforms.h" />
     <ClInclude Include="Renderer\Light.h" />
+    <ClInclude Include="Renderer\Material.h" />
+    <ClInclude Include="Renderer\MaterialInstance.h" />
   </ItemGroup>
 </Project>

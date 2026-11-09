@@ -28,6 +28,9 @@
     <Filter Include="Assets\Scenes">
       <UniqueIdentifier>{9aa1d6e2-5aad-4b06-ba6b-b4c437585ae2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Materials">
+      <UniqueIdentifier>{c2850f14-d910-416a-82dd-a64ad0adf153}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Build\Assets\SpaceGame\Tilemaps\world.json">
@@ -35,6 +38,12 @@
     </None>
     <None Include="..\Build\Assets\scenes\scene.json">
       <Filter>Assets\Scenes</Filter>
+    </None>
+    <None Include="..\Build\Assets\materials\phong.material.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\Build\Assets\materials\ogre.instance.json">
+      <Filter>Assets\Materials</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

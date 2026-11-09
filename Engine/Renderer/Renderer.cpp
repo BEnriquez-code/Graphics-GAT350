@@ -214,7 +214,7 @@ namespace nu
         //   first instance - 0, start at the first instance
     }
 
-    void Renderer::DrawIndex(const IndexBuffer& indexBuffer) {
+    void Renderer::DrawIndex(const IndexBuffer& indexBuffer) const {
         SDL_DrawGPUIndexedPrimitives(
             m_renderPass,
             indexBuffer.GetIndexCount(),

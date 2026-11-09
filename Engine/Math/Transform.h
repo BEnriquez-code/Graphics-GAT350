@@ -18,7 +18,7 @@ namespace nu {
         void SetRotation(const glm::vec3 euler) { rotation = glm::quat(glm::radians(euler)); }
         void SetRotation(const glm::quat& qrotation) { rotation = glm::normalize(qrotation); }
 
-        const glm::mat4 GetMatrix()  {
+        const glm::mat4 GetMatrix() const {
             auto mxt = glm::translate(position);
             auto mxr = glm::toMat4(rotation);
             auto mxs = glm::scale(scale);
@@ -27,9 +27,7 @@ namespace nu {
         }
 
         glm::vec3 Forward() const { return rotation * glm::vec3{ 0, 0, -1 }; }
-
         glm::vec3 Up() const { return rotation * glm::vec3{ 0, 1, 0 }; }
-
         glm::vec3 Right() const { return rotation * glm::vec3{ 1, 0, 0 }; }
 
 

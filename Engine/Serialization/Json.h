@@ -32,6 +32,7 @@ namespace nu::json {
 	bool Read(const value_t& value, const std::string& name, glm::vec3& data);
 	bool Read(const value_t& value, const std::string& name, glm::vec4& data);
 	bool Read(const value_t& value, const std::string& name, std::vector<int>& data);
+	bool Read(const value_t& value, const std::string& name, std::vector<std::string>& data);
 
 	template<typename T>
 	bool ReadOptional(const value_t& value, const std::string& name, T& data) {
