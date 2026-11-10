@@ -189,6 +189,7 @@
   <ItemGroup>
     <None Include="..\Build\Assets\materials\ogre.instance.json" />
     <None Include="..\Build\Assets\materials\phong.material.json" />
+    <None Include="..\Build\Assets\materials\spot.instance.json" />
     <None Include="..\Build\Assets\scenes\scene.json" />
     <None Include="..\Build\Assets\SpaceGame\Tilemaps\world.json" />
   </ItemGroup>

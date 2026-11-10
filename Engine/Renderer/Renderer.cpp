@@ -8,6 +8,7 @@
 #include "IndexBuffer.h"
 #include "Texture.h"
 #include "Math/Rect.h"
+#include "MaterialInstance.h"
 
 #include <iostream>
 
@@ -29,6 +30,7 @@ namespace nu
         }
 
         SDL_GPUShaderFormat formats = SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL;
+        SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
         m_gpuDevice = SDL_CreateGPUDevice(formats, true, nullptr);
         if (!m_gpuDevice) {
             std::cerr << "Failed to create GPU Device" << SDL_GetError() << std::endl;
@@ -149,7 +151,7 @@ namespace nu
     }
 
 
-    void Renderer::SetPipeline(const Pipeline& pipeline)
+    void Renderer::SetPipeline(const Pipeline& pipeline) const
     {
         SDL_BindGPUGraphicsPipeline(m_renderPass, pipeline.m_gpuPipeline);
         // bind the pipeline to the current render pass with SDL_BindGPUGraphicsPipeline(renderPass, gpuPipeline)
@@ -244,6 +246,11 @@ namespace nu
         };
 
         SDL_BindGPUFragmentSamplers(m_renderPass, slot, &binding, 1);
+    }
+
+    void Renderer::SetMaterial(const MaterialInstance& materialInstance) const {
+        SetPipeline(materialInstance.GetMaterial().GetPipeline());
+        materialInstance.Bind(m_commandBuffer, m_renderPass);
     }
 
     void Renderer::CreateDepthBuffer()

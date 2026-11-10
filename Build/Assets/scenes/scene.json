@@ -67,8 +67,8 @@
             "components": [
                 {
                     "type": "ModelComponent",
-                    "model": "models/ogre.obj",
-                    "materials": [ "materials/ogre.instance.json" ]
+                    "model": "models/spot.obj",
+                    "materials": [ "materials/spot.instance.json" ]
                 }
             ]
         }

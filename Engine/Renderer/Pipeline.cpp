@@ -68,6 +68,14 @@ namespace nu
 			}
 		};
 
+		std::cerr << "VB count: " << m_vertexBufferDescriptions.size()
+			<< ", attr count: " << m_vertexAttributes.size() << "\n";
+		for (auto& a : m_vertexAttributes)
+			std::cerr << "  loc " << a.location << " fmt " << a.format
+			<< " offset " << a.offset << "\n";
+		for (auto& b : m_vertexBufferDescriptions)
+			std::cerr << "  slot " << (int)b.slot << " pitch " << b.pitch << "\n";
+
 		// create the pipeline with SDL_CreateGPUGraphicsPipeline(device, &createInfo) and store it in m_gpuPipeline
 		m_gpuPipeline = SDL_CreateGPUGraphicsPipeline(m_gpuDevice, &pipelineCreateInfo);
 		// if the pipeline is null, creation failed

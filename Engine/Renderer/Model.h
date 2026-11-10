@@ -38,7 +38,7 @@ namespace nu
         void LoadMaterials(const aiScene* scene, const std::string& directory, const class Renderer& renderer);
 
         // binds and draws every mesh, call between BeginFrame and EndFrame with a pipeline set
-        void Draw(const class Renderer& renderer) const;
+        void Draw(const class Renderer& renderer, const std::vector<res_t<class MaterialInstance>>& overrides = {}) const;
 
     private:
         void ProcessNode(aiNode* node, const aiScene* scene, const class Renderer& renderer);

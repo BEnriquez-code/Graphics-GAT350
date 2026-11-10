@@ -29,23 +29,6 @@ int main() {
 	Scene scene;
 	scene.Load("scenes/scene.json");
 
-    auto texture = Resources().Get<Texture>("textures/spot_diffuse.png", Engine::Get().GetRenderer());
-
-    auto vshader = Resources().Get<nu::Shader>("shaders/phong.vert", Engine::Get().GetRenderer(), 3);
-    auto fshader = Resources().Get<nu::Shader>("shaders/phong.frag", Engine::Get().GetRenderer(), 3, 1);
-
-    auto pipeline = std::make_shared<Pipeline>();
-
-    pipeline->AddVertexBuffer(sizeof(Model::Vertex));
-    pipeline->AddVertexAttribute(0, SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3, offsetof(Model::Vertex, position));
-    pipeline->AddVertexAttribute(1, SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2, offsetof(Model::Vertex, texcoord));
-    pipeline->AddVertexAttribute(2, SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3, offsetof(Model::Vertex, normal));
-    pipeline->AddVertexAttribute(3, SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3, offsetof(Model::Vertex, tangent));
-
-    pipeline->Create(*vshader.get(), *fshader.get(),
-        Engine::Get().GetRenderer().GetGPUDevice(),
-        Engine::Get().GetRenderer().GetWindow());
-
 
     Transform transform;
     transform.scale = glm::vec3{ 2.0f };
@@ -75,9 +58,6 @@ int main() {
         scene.Update(dt);
                
         Engine::Get().GetRenderer().BeginFrame();
-
-        Engine::Get().GetRenderer().SetPipeline(*pipeline);
-        Engine::Get().GetRenderer().SetFragmentTexture(0, *texture);
 
 		scene.Draw(Engine::Get().GetRenderer());
 
