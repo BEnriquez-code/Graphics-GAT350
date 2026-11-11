@@ -10,12 +10,12 @@ namespace nu
 	{
 		// if both the gpu device and the gpu shader are valid (not null),
 		// release the shader with SDL_ReleaseGPUShader(device, shader)
-		if(m_gpuDevice && m_gpuShader){
+		if (m_gpuDevice && m_gpuShader) {
 			SDL_ReleaseGPUShader(m_gpuDevice, m_gpuShader);
 		}
 	}
 
-	bool Shader::Load(const std::string& filename,const Renderer& renderer)
+	bool Shader::Load(const std::string& filename, const Renderer& renderer)
 	{
 		// store the renderer's gpu device in m_gpuDevice so the destructor can release the shader later
 		m_gpuDevice = renderer.GetGPUDevice();
@@ -25,13 +25,13 @@ namespace nu
 		// otherwise print an error with std::cerr and return false
 		// hint: filename.find(".vert") != std::string::npos is true when ".vert" is in the filename
 		SDL_GPUShaderStage stage{};
-		if(filename.find(".vert") != std::string::npos){
+		if (filename.find(".vert") != std::string::npos) {
 			stage = SDL_GPU_SHADERSTAGE_VERTEX;
 		}
-		else if(filename.find(".frag") != std::string::npos) {
+		else if (filename.find(".frag") != std::string::npos) {
 			stage = SDL_GPU_SHADERSTAGE_FRAGMENT;
 		}
-		else{
+		else {
 			std::cerr << "Invalid shader stage for file: " << filename << std::endl;
 			return false;
 		}
@@ -77,35 +77,43 @@ namespace nu
 		// get samplers count 
 
 		json::document_t metadata;
-		if (!json::Load(filename + ".json", metadata))	{
-			std::cerr << "Could not load shader metadata: " << filename << ".json" << std::endl;
-			return false;
+		if (!json::Load(filename + ".json", metadata)) {
+
+
+			// get samplers count 
+
+			json::document_t metadata;
+			if (!json::Load(filename + ".json", metadata)) {
+
+				std::cerr << "Could not load shader metadata: " << filename << ".json" << std::endl;
+				return false;
+			}
+
+			unsigned int samplers = 0;
+			JSON_READ(metadata, samplers);
+
+			// fill out the shader settings
+			// each field below needs a value, replace each {} using the comment beside it
+			SDL_GPUShaderCreateInfo shaderInfo{
+				.code_size = bytes.size(), // todo: the number of bytes in the shader code
+				.code = bytes.data(), // todo: pointer to the shader code (bytes.data())
+				.entrypoint = entrypoint, // todo: the entry function name
+				.format = format, // todo: the shader format found above
+				.stage = stage, // todo: the shader stage found above
+				.num_samplers = samplers,
+				.num_uniform_buffers = 4
+			};
+
+			// create the shader with SDL_CreateGPUShader(device, &createInfo) and store it in m_gpuShader
+			m_gpuShader = SDL_CreateGPUShader(m_gpuDevice, &shaderInfo);
+			// if the shader is null, creation failed
+			if (!m_gpuShader) {
+				std::cerr << "Failed to create GPU shader: " << SDL_GetError() << std::endl;
+				return false;
+			}
+
+			// shader loaded successfully
+			return true;
 		}
-
-		unsigned int samplers = 0;
-		JSON_READ(metadata, samplers);
-
-		// fill out the shader settings
-		// each field below needs a value, replace each {} using the comment beside it
-		SDL_GPUShaderCreateInfo shaderInfo{
-			.code_size = bytes.size(), // todo: the number of bytes in the shader code
-			.code = bytes.data(), // todo: pointer to the shader code (bytes.data())
-			.entrypoint = entrypoint, // todo: the entry function name
-			.format = format, // todo: the shader format found above
-			.stage = stage, // todo: the shader stage found above
-			.num_samplers = samplers,
-			.num_uniform_buffers = 4
-		};
-
-		// create the shader with SDL_CreateGPUShader(device, &createInfo) and store it in m_gpuShader
-		m_gpuShader = SDL_CreateGPUShader(m_gpuDevice, &shaderInfo);
-		// if the shader is null, creation failed
-		if (!m_gpuShader) {
-			std::cerr << "Failed to create GPU shader: " << SDL_GetError() << std::endl;
-			return false;
-		}
-
-		// shader loaded successfully
-		return true;
 	}
 }

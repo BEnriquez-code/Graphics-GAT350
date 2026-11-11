@@ -33,7 +33,10 @@ for %%f in ("%INPUT%\*.frag.hlsl") do (
     "%SHADERCROSS%" "%%f" -s HLSL -d DXIL -t fragment -e main -o "%OUTPUT%\%%~nf.dxil"
 )
 
+<<<<<<< Updated upstream
 echo Shader compilation complete.
+=======
+>>>>>>> Stashed changes
 
 for %%f in ("%INPUT%\*.vert.hlsl") do ( 
 
@@ -83,4 +86,10 @@ for %%f in ("%INPUT%\*.frag.hlsl") do (
 
     "%SHADERCROSS%" "%%f" -s HLSL -d JSON -t fragment -e main -I "%INPUT%" -o "%OUTPUT%\%%~nf.json" || set FAILED=1 
 
+<<<<<<< Updated upstream
 )
+=======
+)
+
+echo Shader compilation complete.
+>>>>>>> Stashed changes
