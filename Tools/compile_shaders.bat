@@ -5,6 +5,7 @@ set SHADERCROSS=%~dp0Shadercross\shadercross.exe
 set INPUT=%~1
 set OUTPUT=%~2
 
+
 if not exist "%OUTPUT%" mkdir "%OUTPUT%"
 
 echo Compiling shaders...
@@ -21,6 +22,7 @@ for %%f in ("%INPUT%*.vert.hlsl") do (
 
     REM reflection metadata: sampler and uniform buffer counts for SDL_GPUShaderCreateInfo
     "%SHADERCROSS%" "%%f" -s HLSL -d JSON -t vertex -e main -I "%INPUT%" -o "%OUTPUT%%%~nf.json" || set FAILED=1
+
 )
 
 REM =========================

@@ -10,8 +10,6 @@ namespace nu
 
 		void Draw(const Renderer& renderer) override;
 
-
-
 	private:
 	};
 }

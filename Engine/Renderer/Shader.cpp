@@ -78,42 +78,31 @@ namespace nu
 
 		json::document_t metadata;
 		if (!json::Load(filename + ".json", metadata)) {
-
-
-			// get samplers count 
-
-			json::document_t metadata;
-			if (!json::Load(filename + ".json", metadata)) {
-
-				std::cerr << "Could not load shader metadata: " << filename << ".json" << std::endl;
-				return false;
-			}
-
-			unsigned int samplers = 0;
-			JSON_READ(metadata, samplers);
-
-			// fill out the shader settings
-			// each field below needs a value, replace each {} using the comment beside it
-			SDL_GPUShaderCreateInfo shaderInfo{
-				.code_size = bytes.size(), // todo: the number of bytes in the shader code
-				.code = bytes.data(), // todo: pointer to the shader code (bytes.data())
-				.entrypoint = entrypoint, // todo: the entry function name
-				.format = format, // todo: the shader format found above
-				.stage = stage, // todo: the shader stage found above
-				.num_samplers = samplers,
-				.num_uniform_buffers = 4
-			};
-
-			// create the shader with SDL_CreateGPUShader(device, &createInfo) and store it in m_gpuShader
-			m_gpuShader = SDL_CreateGPUShader(m_gpuDevice, &shaderInfo);
-			// if the shader is null, creation failed
-			if (!m_gpuShader) {
-				std::cerr << "Failed to create GPU shader: " << SDL_GetError() << std::endl;
-				return false;
-			}
-
-			// shader loaded successfully
-			return true;
+			std::cerr << "Could not load shader metadata: " << filename << ".json" << std::endl;
 		}
+
+		unsigned int samplers = 0;
+		JSON_READ(metadata, samplers);
+		// fill out the shader settings
+		// each field below needs a value, replace each {} using the comment beside it
+		SDL_GPUShaderCreateInfo shaderInfo{
+			.code_size = bytes.size(), // todo: the number of bytes in the shader code
+			.code = bytes.data(), // todo: pointer to the shader code (bytes.data())
+			.entrypoint = entrypoint, // todo: the entry function name
+			.format = format, // todo: the shader format found above
+			.stage = stage, // todo: the shader stage found above
+			.num_samplers = samplers,
+			.num_uniform_buffers = 4
+		};
+
+		// create the shader with SDL_CreateGPUShader(device, &createInfo) and store it in m_gpuShader
+		m_gpuShader = SDL_CreateGPUShader(m_gpuDevice, &shaderInfo);
+		// if the shader is null, creation failed
+		if (!m_gpuShader) {
+			std::cerr << "Failed to create GPU shader: " << SDL_GetError() << std::endl;
+			return false;
+		}
+		// shader loaded successfully
+		return true;
 	}
 }
