@@ -9,8 +9,9 @@
 
 namespace nu
 {
-	bool Material::Load(const std::string& filename, const class Renderer& renderer)
+	bool Material::Load(const std::string& filename, const Renderer& renderer)
 	{
+
 		json::document_t document;
 		if (!json::Load(filename, document))
 		{
