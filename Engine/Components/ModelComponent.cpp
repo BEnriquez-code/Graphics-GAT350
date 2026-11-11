@@ -9,16 +9,22 @@ namespace nu
 	FACTORY_REGISTER(ModelComponent)
 
 	void ModelComponent::Draw(const Renderer& renderer) {
+		if (!m_model) {
+			std::cerr << "Could not draw model for actor " << m_owner->GetName() << ".\n";
+			return;
+		}
+		glm::mat4 model = GetOwner()->GetTransform().GetMatrix();
 		ObjectUniform objectUniform{
 			.model = GetOwner()->GetTransform().GetMatrix(),
-			.normalMatrix = GetOwner()->GetTransform().GetMatrix()
+			.normalMatrix = glm::transpose(glm::inverse(model))
 		};
 
-		renderer.SetVertexUniform(UniformSlot::Frame, &objectUniform, sizeof(objectUniform));
-		renderer.SetFragmentUniform(UniformSlot::Frame, &objectUniform, sizeof(objectUniform));
+		renderer.SetVertexUniform(UniformSlot::Object, &objectUniform, sizeof(objectUniform));
+		renderer.SetFragmentUniform(UniformSlot::Object,&objectUniform, sizeof(objectUniform));
 
 		m_model->Draw(renderer, m_materials);
 	}
+
 	void ModelComponent::Read(const json::value_t& value) {
 		RendererComponent::Read(value);
 

@@ -27,15 +27,15 @@ namespace nu
 	LightData LightComponent::GetLightData() const {
 		const Transform& transform = GetOwner()->GetTransform();
 
-		LightData lightData = {
+		LightData lightData = {	
 			.position = transform.position,
 			.type = m_type,
 			.direction = transform.Forward(),
-			.innerCutoff = glm::cos(glm::radians(m_innerAngle)),
+			.range = m_range,
 			.color = m_color,
 			.intensity = m_intensity,
+			.innerCutoff = glm::cos(glm::radians(m_innerAngle)),
 			.outerCutoff = glm::cos(glm::radians(m_outerAngle)),
-			.range = m_range
 		};
 
 		return lightData;

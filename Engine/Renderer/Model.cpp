@@ -5,6 +5,7 @@
 #include "Renderer/MaterialInstance.h"
 #include "Renderer/Texture.h"
 #include "Material.h"
+#include "Core/File.h"
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -32,7 +33,8 @@ namespace nu
 
         // todo: start processing the scene from the root node with ProcessNode(node, scene, renderer)
         // the root node is scene->mRootNode
-        std::string directory = "";
+          // texture paths in the model are relative to the model file
+        std::string directory = GetParentDirectory(filename) + "/";
         LoadMaterials(scene, directory, renderer);
         ProcessNode(scene->mRootNode, scene, renderer);
 

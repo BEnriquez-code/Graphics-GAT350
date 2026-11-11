@@ -50,6 +50,9 @@ Output main(Input input)
     
     output.color = float4(albedo.rgb * diffuse + specular, albedo.a);
 
+    
+    //output.color = float4(albedo.rgb * (lights.ambient + 0.2), 1);
     return output;
 };
 
+    

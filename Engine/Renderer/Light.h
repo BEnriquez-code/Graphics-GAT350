@@ -20,11 +20,11 @@ namespace nu
 		glm::vec3 position;     // world space (point, spot)
 		LightType type;
 		glm::vec3 direction;    // world space, normalized, direction the light travels (directional, spot)
-		float innerCutoff;      // cos of the inner cone angle (spot)
+		float range;            // distance where the light reaches zero (point, spot)
 		glm::vec3 color;
 		float intensity;
+		float innerCutoff;      // cos of the inner cone angle (spot)
 		float outerCutoff;      // cos of the outer cone angle (spot)
-		float range;            // distance where the light reaches zero (point, spot)
 		glm::vec2 padding;
 	};
 

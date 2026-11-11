@@ -29,7 +29,7 @@
             "type": "Actor",
             "tag": "Light",
             "transform": {
-                "rotation": [ -60, 30, 0 ]
+                "position": [ -60, 30, 0 ]
             },
             "components": [
                 {
@@ -67,8 +67,8 @@
             "components": [
                 {
                     "type": "ModelComponent",
-                    "model": "models/spot.obj",
-                    "materials": [ "materials/spot.instance.json" ]
+                    "model": "models/ogre.obj",
+                    "materials": [ "materials/ogre.instance.json" ]
                 }
             ]
         }

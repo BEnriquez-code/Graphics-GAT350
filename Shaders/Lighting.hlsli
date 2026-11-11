@@ -20,11 +20,11 @@ struct Light
     float3 position;
     uint type;
     float3 direction;
-    float innerCutoff;
+    float range;
     float3 color;
     float intensity;
+    float innerCutoff;
     float outerCutoff;
-    float range;
     float2 padding;
 };
 
@@ -68,7 +68,7 @@ float3 getLightVector(Light light, float3 position, out float attenuation)
             }
             break;
     }
-    return -L;
+    return L;
     
 }
 
