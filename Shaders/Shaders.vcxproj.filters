@@ -13,15 +13,31 @@
     <FxCompile Include="color.frag.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="unlit.frag.hlsl" />
-    <FxCompile Include="unlit.vert.hlsl" />
-    <FxCompile Include="gouraud.frag.hlsl" />
-    <FxCompile Include="gouraud.vert.hlsl" />
-    <FxCompile Include="phong.frag.hlsl" />
-    <FxCompile Include="phong.vert.hlsl" />
+    <FxCompile Include="unlit.vert.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="unlit.frag.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="phong.vert.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="phong.frag.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="gouraud.vert.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="gouraud.frag.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Lighting.hlsli" />
-    <None Include="uniforms.hlsli" />
+    <None Include="uniforms.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Lighting.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

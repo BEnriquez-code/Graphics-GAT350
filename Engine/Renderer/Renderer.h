@@ -22,6 +22,7 @@ namespace nu
 
         bool BeginFrame();
 		bool EndFrame();
+        void EndRenderPass();
 
         void DrawPoint(float x, float y)const ;
         void DrawFillRect(float x, float y, float w, float h) const;
@@ -40,6 +41,8 @@ namespace nu
 
         //SDL GPU
         SDL_GPUDevice* GetGPUDevice() const { return m_gpuDevice; }
+        SDL_GPUCommandBuffer* GetGPUCommandBuffer() const { return m_commandBuffer; }
+        SDL_GPUTexture* GetGPUSwapchainTexture() const { return m_swapchainTexture; }
         SDL_Window* GetWindow() const { return m_window; }
 
         void SetPipeline(const class Pipeline& pipeline) const;
@@ -71,6 +74,7 @@ namespace nu
         SDL_GPUCommandBuffer* m_commandBuffer = nullptr;
         SDL_GPURenderPass* m_renderPass = nullptr;
         SDL_GPUTexture* m_depthTexture = nullptr;
+        SDL_GPUTexture* m_swapchainTexture = nullptr;
         
         int m_width = 0;
         int m_height = 0;

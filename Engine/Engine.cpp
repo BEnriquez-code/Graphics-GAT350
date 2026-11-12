@@ -16,6 +16,7 @@ namespace nu {
 		m_renderer.Initialize("Game Engine", windowWidth, windowHeight);
 		m_input.Initialize();
 		m_audio.Initialize();
+		m_editor.Initialize(m_renderer);
 		m_particleSystem.Initialize(1000000);
 
 		return true;
@@ -25,6 +26,7 @@ namespace nu {
 		m_input.Shutdown();
 		m_renderer.Shutdown();
 		m_particleSystem.Shutdown();
+		m_editor.Shutdown();
 	};
 	void Engine::Update() {
 		m_audio.Update();
