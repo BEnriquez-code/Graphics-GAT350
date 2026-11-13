@@ -58,9 +58,9 @@
             ]
         },
         {
-            "name": "Cow",
+            "name": "Ogre",
             "type": "Actor",
-            "tag": "Cow",
+            "tag": "Ogre",
             "transform": {
                 "position": [ 0, 0, 0 ]
             },
@@ -69,6 +69,39 @@
                     "type": "ModelComponent",
                     "model": "models/ogre.obj",
                     "materials": [ "materials/ogre.instance.json" ]
+                }
+            ]
+        },
+        {
+            "name": "Cow",
+            "type": "Actor",
+            "tag": "Cow",
+            "transform": {
+                "position": [ 1, 0, 0 ],
+                "rotation": [0, 0, -90]
+            },
+            "components": [
+                {
+                    "type": "ModelComponent",
+                    "model": "models/spot.obj",
+                    "materials": [ "materials/spot.instance.json" ]
+                }
+            ]
+        },
+        {
+            "name": "Bar",
+            "type": "Actor",
+            "tag": "Bar",
+            "transform": {
+                "position": [ 2, 0, 0 ],
+                "rotation": [ 0, 0, -90 ],
+                "scale": [0.25, 0.25, 0.25]
+            },
+            "components": [
+                {
+                    "type": "ModelComponent",
+                    "model": "models/bar.fbx",
+                    "materials": ["materials/tavern.instance.json"]
                 }
             ]
         }
