@@ -6,10 +6,10 @@
 namespace nu {
 	FACTORY_REGISTER(CameraControllerComponent)
 	
-	void CameraControllerComponent::Update(float dt) {
+		void CameraControllerComponent::Update(float dt) {
 
 		// get camera rotation
-		if (Engine::Get().GetInput().GetButtonPressed(Input::MouseButton::Right))
+		if (Engine::Get().GetInput().GetButtonDown(Input::MouseButton::Right))
 		{
 			glm::vec2 axis = Engine::Get().GetInput().GetMouseDelta() * m_sensitivity;
 
@@ -35,6 +35,8 @@ namespace nu {
 
 		m_owner->SetPosition(m_owner->GetTransform().position + direction * (m_speed * dt));
 	}
+
+
 	void CameraControllerComponent::Read(const json::value_t& value) {
 		Component::Read(value);
 		JSON_READ_NAME(value, "speed", m_speed);

@@ -13,11 +13,12 @@ namespace nu
 	}
 
 	void CameraComponent::Update(float dt) {
-		glm::vec3 forward = glm::vec3{ 0.0f, 0.0f, -1.0f };
+		glm::vec3 forward = GetOwner()->GetTransform().Forward();
 
 		m_view = glm::lookAtRH(m_owner->GetTransform().position, m_owner->GetTransform().position + forward, glm::vec3{ 0.0f, 1.0f, 0.0f });
 		
 		m_projection = glm::perspective(glm::radians(m_fov), m_aspectRatio, m_nearPlane, m_farPlane);
+
 	}
 
 	void CameraComponent::Draw(const Renderer& renderer) {

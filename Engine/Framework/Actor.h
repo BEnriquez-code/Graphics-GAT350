@@ -58,8 +58,6 @@ namespace nu {
         const std::string& GetTag() const { return m_tag; }
         void SetTag(const std::string& tag) { m_tag = tag; }
 
-        float GetRadius() const;
-
         Scene* GetScene() {return m_scene;}
 
         void SetDestroyed(bool destroy = true) { m_destroyed = destroy; }
