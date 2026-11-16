@@ -1,18 +1,22 @@
 #pragma once
 #include "Actor.h"
+#include "Editor/Editor.h"
 #include <string>
 #include <vector>
 #include <memory>
 
+
 namespace nu{
-	class Scene {
+	class Scene : public IGUI
+	{
 
 	public:
 		void AddActor(std::unique_ptr<Actor> actor);
-		const std::vector<std::unique_ptr<Actor>>& GetActors() const { return m_actors; }
+		//const std::vector<std::unique_ptr<Actor>>& GetActors() const { return m_actors; }
 		void RemoveAllActors(bool force = false);
 
 		bool Load(const std::string& sceneName);
+		void UpdateGui() override;
 
 		void Update(float dt);
 		void Draw(const class Renderer& renderer);
@@ -26,6 +30,8 @@ namespace nu{
 		template<typename T>
 		T* FindByTag(const std::string& tag);
 
+		const auto& GetActors() const { return m_actors; }
+
 		void SetGame(class Game* game) { m_game = game; };
 		class Game* GetGame() { return m_game; };
 
@@ -35,6 +41,7 @@ namespace nu{
 		std::vector<std::unique_ptr<Actor>> m_pendingActors;
 
 		class Game* m_game{ nullptr };
+		glm::vec3 m_ambientLight{0.2f};
 	};
 
 	template<typename T>

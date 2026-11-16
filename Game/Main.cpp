@@ -59,7 +59,7 @@ int main() {
 
         scene.Update(dt);
         Engine::Get().GetEditor().BeginFrame();
-        Engine::Get().GetEditor().Update();
+        Engine::Get().GetEditor().Update(scene);
                
         Engine::Get().GetRenderer().BeginFrame();
 

@@ -6,6 +6,7 @@
 #include "Components/CameraComponent.h"
 #include "Components/LightComponent.h"
 #include "Renderer/Light.h"
+#include "Engine.h"
 
 
 namespace nu {
@@ -59,6 +60,15 @@ namespace nu {
 		
 	}
 
+	void Scene::UpdateGui() {
+		glm::vec3 clearColor = Engine::Get().GetRenderer().GetClearColor();
+
+		ImGui::ColorEdit3("Clear Color", glm::value_ptr(clearColor));
+		Engine::Get().GetRenderer().SetClearColor(clearColor);
+
+		ImGui::ColorEdit3("Ambient Light", glm::value_ptr(m_ambientLight));
+	}
+
 	void Scene::Update(float dt) {
 		for (auto& actor : m_actors) {
 			actor->Update(dt);
@@ -79,6 +89,7 @@ namespace nu {
 	
 		m_pendingActors.clear();
 	}
+
 	void Scene::Draw(const Renderer& renderer) {
 		FrameUniform frameUniform{};
 
@@ -98,12 +109,14 @@ namespace nu {
 		}
 
 		LightUniform lightUniform{};
-		lightUniform.ambient = glm::vec3{ 0.2f };
+		lightUniform.ambient = m_ambientLight;
 		auto lights = GetActorByTag<Actor>(("Light"));
 		for (auto light : lights)
 		{
+			if (!light->IsActive()) continue;
+
 			auto lightComponent = light->GetComponent<LightComponent>();
-			if (lightComponent)
+			if (lightComponent && lightComponent->IsActive())
 			{
 				lightUniform.lights[lightUniform.numLights++] = lightComponent->GetLightData();
 			}
