@@ -81,6 +81,7 @@ namespace nu
 
 	void MaterialInstance::Bind(SDL_GPUCommandBuffer* commandBuffer, SDL_GPURenderPass* renderPass) const
 	{
+		
 		// empty slots fall back to a default texture so the shader can always sample
 		std::vector<SDL_GPUTextureSamplerBinding> bindings;
 		bindings.reserve(m_textures.size());
@@ -95,6 +96,7 @@ namespace nu
 			SDL_BindGPUFragmentSamplers(renderPass, 0, bindings.data(), (uint32_t)bindings.size());
 		}
 
+
 		// same struct to both stages, each uses the fields it needs
 		SDL_PushGPUVertexUniformData(commandBuffer, (uint32_t)UniformSlot::Material, &m_data, sizeof(m_data));
 		SDL_PushGPUFragmentUniformData(commandBuffer, (uint32_t)UniformSlot::Material, &m_data, sizeof(m_data));
@@ -108,7 +110,10 @@ namespace nu
 	bool MaterialInstance::SetTexture(const std::string& name, res_t<Texture> texture)
 	{
 		int slot = m_material->GetTextureSlot(name);
-		if (slot < 0) return false;
+		if (slot < 0) {
+			std::cerr << "Material has no texture slot named \"" << name << "\"n";
+			return false;
+		}
 
 		m_textures[slot] = texture;
 		return true;

@@ -41,7 +41,7 @@ namespace nu
         return true;
     }
 
-    void Model::Draw(const Renderer& renderer, const std::vector<res_t<class MaterialInstance>>& overrides) const
+    void Model::Draw(const Renderer& renderer, const std::vector<res_t<MaterialInstance>>& overrides) const
     {
         for (const auto& mesh : m_meshes)
         {
@@ -64,6 +64,7 @@ namespace nu
             renderer.DrawIndex(*mesh.indexBuffer);
         }
     }
+
 
     void Model::ProcessNode(aiNode* node, const aiScene* scene, const Renderer& renderer)
     {

@@ -36,9 +36,16 @@ namespace nu {
                 JSON_READ(value, position);
             }   
             
-            glm::vec3 euler;
-            JSON_READ_NAME(value,"rotation", euler);
-            JSON_READ(value, scale);
+            if (JSON_HAS(value, rotation)) {
+                glm::vec3 euler;
+                JSON_READ_NAME(value,"rotation", euler);
+                SetRotation(euler);
+            
+            }
+
+            if (JSON_HAS(value, scale)) {
+                JSON_READ(value, scale);
+            }
         }
     };
 }

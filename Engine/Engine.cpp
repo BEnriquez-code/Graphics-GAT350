@@ -13,7 +13,7 @@ namespace nu {
 		const int windowWidth = 1920;
 		const int windowHeight = 1024;
 
-		m_renderer.Initialize("Game Engine", windowWidth, windowHeight);
+		m_renderer.Initialize("Graphics Engine", windowWidth, windowHeight);
 		m_input.Initialize();
 		m_audio.Initialize();
 		m_editor.Initialize(m_renderer);
