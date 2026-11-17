@@ -188,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Build\Assets\materials\flat_plane.instance.json" />
+    <None Include="..\Build\Assets\materials\ground.instance.json" />
     <None Include="..\Build\Assets\materials\ogre.instance.json" />
     <None Include="..\Build\Assets\materials\phong.material.json" />
     <None Include="..\Build\Assets\materials\spot.instance.json" />
