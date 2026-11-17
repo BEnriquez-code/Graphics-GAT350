@@ -127,7 +127,10 @@ namespace nu {
 
 
 		for (const auto& actor : m_actors) {
-			actor->Draw(renderer);
+			if (actor->IsActive()) {
+				actor->Draw(renderer);
+			
+			}
 		}
 
 	}
