@@ -17,6 +17,8 @@ namespace nu
 
 		const glm::mat4x4& GetViewMatrix() const { return m_view; }
 		const glm::mat4x4& GetProjectionMatrix() const { return m_projection; }
+
+		void UpdateGui() override;
 		
 
 	private:
