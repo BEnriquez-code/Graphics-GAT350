@@ -124,7 +124,7 @@ namespace nu
 			if (ImGui::Selectable(resource.second->GetName().c_str(), m_selected == resource.second.get())) {
 				m_selected = resource.second.get();
 			}
-			ImGui::PopID();
+			ImGui::PopID();	
 		}
 		ImGui::End();
 	}

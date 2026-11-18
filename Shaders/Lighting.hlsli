@@ -66,7 +66,7 @@ float3 getLightVector(Light light, float3 position, out float attenuation)
                 float distance = length(toLight);
                 L = toLight / distance;
                 attenuation = calculateAttenuation(distance, light.range);
-                attenuation *= smoothstep(light.outerCutoff, light.innerCutoff, dot(L, light.direction));
+                attenuation *= smoothstep(light.outerCutoff, light.innerCutoff, dot(-L, light.direction));
             }
             break;
     }
@@ -95,7 +95,7 @@ float3 calculateSpecular(float3 radiance, float3 N, float3 L, float3 V, Material
 }
 
 void calculateLighting(Light light, Material material, float3 position, float3 N, float3 V,
-                       out float3 diffuse, out float3 specular)
+                       inout float3 diffuse, inout float3 specular)
 {
     float attenuation;
     float3 L = getLightVector(light, position, attenuation);

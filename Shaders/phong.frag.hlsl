@@ -44,7 +44,7 @@ struct Output
 Output main(Input input)
 {
     Output output;
-    
+  
     float specularMask = specular_texture.Sample(specular_sampler, input.texcoord).r;
     float3 emissive = emissive_texture.Sample(emissive_sampler, input.texcoord).rgb * material.emissiveColor;
     
@@ -56,11 +56,12 @@ Output main(Input input)
     float3 V = normalize(frame.cameraPosition - input.worldPosition);
     for (uint i = 0; i < lights.numLights; i++)
     {
-        calculateLighting(lights.lights[i], material, input.worldPosition, N, V, diffuse, specular);
+       calculateLighting(lights.lights[i], material, input.worldPosition, N, V, diffuse, specular);
     }
     
     output.color = float4(albedo.rgb * diffuse + specular * material.specularColor * specularMask + emissive, albedo.a);
     return output;
+
 };
 
     
