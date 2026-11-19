@@ -21,6 +21,9 @@ namespace nu
 
 		SDL_GPUTexture* GetGPUTexture() const { return m_gpuTexture; }
 		SDL_GPUSampler* GetGPUSampler() const { return m_gpuSampler; }
+
+		void UpdateGui() override;
+
 		friend class Renderer;
 
 	private:
