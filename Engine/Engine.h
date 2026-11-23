@@ -8,6 +8,7 @@
 #include "Core/StringUtils.h"
 
 #include "Core/Factory.h"
+#include "Editor/Editor.h"
 
 #include "Renderer/Text.h"
 
@@ -43,6 +44,7 @@ namespace nu {
 		Renderer& GetRenderer() { return m_renderer; };
 		Audio& GetAudio() { return m_audio; };
 		Time& GetTime() { return m_time; };
+		Editor& GetEditor() { return m_editor; }
 
 		ParticleSystem& GetPS() { return m_particleSystem; }
 
@@ -56,7 +58,7 @@ namespace nu {
 		Input m_input;
 		Renderer m_renderer;
 		Audio m_audio;
-
+		Editor m_editor;
 		Time m_time;
 		ParticleSystem m_particleSystem;
 	};

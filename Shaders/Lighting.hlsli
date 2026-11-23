@@ -8,25 +8,33 @@ static const uint MAX_LIGHTS = 8;
 
 struct Material
 {
-    float4 color;
+    float4 baseColor;
+    float3 specularColor;
+    float shininess;
+    float3 emissiveColor;
+    float padding;
     float2 tiling;
     float2 offset;
-    float shininess;
-    float3 padding;
 };
 
 struct Light
 {
-    float3 posiiton;
+    float3 position;
     uint type;
     float3 direction;
-    float innerCutoff;
+    float range;
     float3 color;
     float intensity;
-    float3 ambient;
+    float innerCutoff;
     float outerCutoff;
-    float range;
-    float3 padding;
+    float2 padding;
+};
+
+struct Lights
+{
+    Light lights[MAX_LIGHTS];
+    float3 ambient;
+    uint numLights;
 };
 
 float calculateAttenuation(float distance, float range)
@@ -45,7 +53,7 @@ float3 getLightVector(Light light, float3 position, out float attenuation)
             break;
         case LIGHT_POINT:
             {
-                float3 toLight = light.posiiton - position;
+                float3 toLight = light.position - position;
                 float distance = length(toLight);
                 attenuation = calculateAttenuation(distance, light.range);
                 L = toLight / distance;
@@ -54,15 +62,15 @@ float3 getLightVector(Light light, float3 position, out float attenuation)
         case LIGHT_SPOT:
             {
             
-                float3 toLight = light.posiiton - position;
+                float3 toLight = light.position - position;
                 float distance = length(toLight);
                 L = toLight / distance;
                 attenuation = calculateAttenuation(distance, light.range);
-                attenuation *= smoothstep(light.outerCutoff, light.innerCutoff, dot(L, light.direction));
+                attenuation *= smoothstep(light.outerCutoff, light.innerCutoff, dot(-L, light.direction));
             }
             break;
     }
-    return -L;
+    return L;
     
 }
 
@@ -87,7 +95,7 @@ float3 calculateSpecular(float3 radiance, float3 N, float3 L, float3 V, Material
 }
 
 void calculateLighting(Light light, Material material, float3 position, float3 N, float3 V,
-                       out float3 diffuse, out float3 specular)
+                       inout float3 diffuse, inout float3 specular)
 {
     float attenuation;
     float3 L = getLightVector(light, position, attenuation);

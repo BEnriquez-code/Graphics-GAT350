@@ -39,13 +39,6 @@ namespace nu {
 
     void Actor::Update(float dt) {
 
-        //physics
-        //m_transform.position += (m_velocity * dt);
-       // m_velocity *= 0.9997f; // Apply friction to slow down the actor over time
-
-        m_transform.position.x = math::Wrap(0.0f, 1920.0f, m_transform.position.x);
-        m_transform.position.y = math::Wrap(0.0f, 1024.0f, m_transform.position.y);
-
         for (auto& component : m_components) {
             component->Update(dt);
         }
@@ -60,11 +53,6 @@ namespace nu {
             }
             
         }
-    }
-
-    float Actor::GetRadius() const {
-   
-	   return 0.0f;
     }
 
     void Actor::Read(const json::value_t& value) {
@@ -95,6 +83,38 @@ namespace nu {
                     AddComponent(std::move(component));
                 }
             }
+        }
+
+    }
+
+    void Actor::UpdateGui() {
+        ImGui::Checkbox("##Active", &m_active);
+        ImGui::SameLine();
+
+        Object::UpdateGui();
+
+        ImGui::Text("Tag: %s", m_tag.c_str());
+        ImGui::Separator();
+
+        if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
+            m_transform.UpdateGui();
+        }
+
+        // components information
+        for (auto& component : m_components)
+        {
+            ImGui::PushID(component.get());
+            ImGui::Separator();
+
+            bool active = component->IsActive();
+            if (ImGui::Checkbox("##active", &active)) component->SetActive(active);
+            ImGui::SameLine();
+
+            if (ImGui::CollapsingHeader(component->GetClassName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+            {
+                component->UpdateGui();
+            }
+            ImGui::PopID();
         }
 
     }

@@ -10,7 +10,9 @@ cbuffer VertexUniforms : register(b0, space1)
 
 cbuffer LightUniforms : register(b1, space1)
 {
-    Light light;
+    Light lights[MAX_LIGHTS];
+    uint numLights;
+    float3 ambient;
 }
 
 cbuffer MaterialUniforms : register(b2, space1)
@@ -34,7 +36,7 @@ struct Output
 };
 
 Output main(Input input)
-{
+{   
     Output output;
     output.texcoord = (input.texcoord * material.tiling) + material.offset;
     output.position = mul(mvp, float4(input.position, 1.0f));
@@ -43,7 +45,23 @@ Output main(Input input)
     float3 N = normalize(mul((float3x3)model, input.normal));
     float3 V = normalize(cameraPosition - worldPosition);
     
-    calculateLighting(light, material, worldPosition, N, V, output.diffuse, output.specular);
+    float3 totaldiffuse = ambient;
+    float3 totalspecular = 0;
+    
+    for (uint i = 0; i < numLights; i++)
+    {
+        float3 diffuse = float3(0, 0, 0);
+        float3 specular = float3(0, 0, 0);
+        
+        calculateLighting(lights[i], material, worldPosition, N, V, diffuse, specular);
+        
+        totaldiffuse += diffuse;
+        totalspecular += specular;
+    }
+    output.diffuse = totaldiffuse;
+    output.specular = totalspecular;
+        
+    
 
     return output;
 }

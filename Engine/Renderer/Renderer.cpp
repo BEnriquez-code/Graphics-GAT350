@@ -8,6 +8,7 @@
 #include "IndexBuffer.h"
 #include "Texture.h"
 #include "Math/Rect.h"
+#include "MaterialInstance.h"
 
 #include <iostream>
 
@@ -29,6 +30,7 @@ namespace nu
         }
 
         SDL_GPUShaderFormat formats = SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL;
+        SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
         m_gpuDevice = SDL_CreateGPUDevice(formats, true, nullptr);
         if (!m_gpuDevice) {
             std::cerr << "Failed to create GPU Device" << SDL_GetError() << std::endl;
@@ -79,19 +81,19 @@ namespace nu
         }
 
 
-        SDL_GPUTexture* swapchainTexture = nullptr;
-        if (!SDL_WaitAndAcquireGPUSwapchainTexture(m_commandBuffer, m_window, &swapchainTexture, nullptr, nullptr))
+        m_swapchainTexture = nullptr;
+        if (!SDL_WaitAndAcquireGPUSwapchainTexture(m_commandBuffer, m_window, &m_swapchainTexture, nullptr, nullptr))
         {
             std::cerr << "Could not acquire swapchain texture: " << SDL_GetError() << std::endl;
             return false;
         }
 
-        if (swapchainTexture != nullptr)
+        if (m_swapchainTexture != nullptr)
         {
             // configure the color target attachments (This handles clearing the screen)
             SDL_GPUColorTargetInfo color_target_info{};
-            color_target_info.texture = swapchainTexture;
-            color_target_info.clear_color = SDL_FColor{ 0.2f, 0.2f, 0.2f, 1.0f };
+            color_target_info.texture = m_swapchainTexture;
+            color_target_info.clear_color = SDL_FColor{GetClearColor().r, GetClearColor().g, GetClearColor().b, 1.0f};
             color_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
             color_target_info.store_op = SDL_GPU_STOREOP_STORE;
 
@@ -112,12 +114,7 @@ namespace nu
 
     bool Renderer::EndFrame()
     {
-        if (m_renderPass)
-        {
-            SDL_EndGPURenderPass(m_renderPass);
-            m_renderPass = nullptr;
-        }
-
+        EndRenderPass();
         if (!SDL_SubmitGPUCommandBuffer(m_commandBuffer))
         {
             std::cerr << "Could not submit command buffer: " << SDL_GetError() << std::endl;
@@ -125,8 +122,17 @@ namespace nu
         }
 
         m_commandBuffer = nullptr;
+        m_swapchainTexture = nullptr;
 
         return true;
+    }
+
+    void Renderer::EndRenderPass() {
+        if (m_renderPass)
+        {
+            SDL_EndGPURenderPass(m_renderPass);
+            m_renderPass = nullptr;
+        }
     }
 
     void Renderer::DrawPoint(float x, float y)const {
@@ -149,7 +155,7 @@ namespace nu
     }
 
 
-    void Renderer::SetPipeline(const Pipeline& pipeline)
+    void Renderer::SetPipeline(const Pipeline& pipeline) const
     {
         SDL_BindGPUGraphicsPipeline(m_renderPass, pipeline.m_gpuPipeline);
         // bind the pipeline to the current render pass with SDL_BindGPUGraphicsPipeline(renderPass, gpuPipeline)
@@ -157,7 +163,7 @@ namespace nu
         // use pipeline.GetGPUPipeline() to get the sdl pipeline
     }
 
-    void Renderer::SetVertexBuffer(const VertexBuffer& vertexBuffer)
+    void Renderer::SetVertexBuffer(const VertexBuffer& vertexBuffer) const
     {
         // describe which buffer to bind and where to start reading from
         SDL_GPUBufferBinding binding{
@@ -180,7 +186,7 @@ namespace nu
         );
     }
 
-    void Renderer::SetIndexBuffer(const IndexBuffer& indexBuffer)
+    void Renderer::SetIndexBuffer(const IndexBuffer& indexBuffer) const
     {
         // describe which buffer to bind and where to start reading from
         SDL_GPUBufferBinding binding{
@@ -214,7 +220,7 @@ namespace nu
         //   first instance - 0, start at the first instance
     }
 
-    void Renderer::DrawIndex(const IndexBuffer& indexBuffer) {
+    void Renderer::DrawIndex(const IndexBuffer& indexBuffer) const {
         SDL_DrawGPUIndexedPrimitives(
             m_renderPass,
             indexBuffer.GetIndexCount(),
@@ -225,14 +231,14 @@ namespace nu
         );
     }
 
-    void Renderer::SetVertexUniform(uint32_t slot, const void* data, uint32_t size)
+    void Renderer::SetVertexUniform(UniformSlot slot, const void* data, uint32_t size) const
     {
-        SDL_PushGPUVertexUniformData(m_commandBuffer, slot, data, size);
+        SDL_PushGPUVertexUniformData(m_commandBuffer, (uint32_t)slot, data, size);
     }
-    
-    void Renderer::SetFragmentUniform(uint32_t slot, const void* data, uint32_t size)
+
+    void Renderer::SetFragmentUniform(UniformSlot slot, const void* data, uint32_t size) const
     {
-        SDL_PushGPUFragmentUniformData(m_commandBuffer, slot, data, size);
+        SDL_PushGPUFragmentUniformData(m_commandBuffer, (uint32_t)slot, data, size);
     }
 
     void Renderer::SetFragmentTexture(uint32_t slot, const Texture& texture)
@@ -244,6 +250,11 @@ namespace nu
         };
 
         SDL_BindGPUFragmentSamplers(m_renderPass, slot, &binding, 1);
+    }
+
+    void Renderer::SetMaterial(const MaterialInstance& materialInstance) const {
+        SetPipeline(materialInstance.GetMaterial().GetPipeline());
+        materialInstance.Bind(m_commandBuffer, m_renderPass);
     }
 
     void Renderer::CreateDepthBuffer()

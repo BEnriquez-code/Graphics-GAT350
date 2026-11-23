@@ -24,6 +24,11 @@ namespace nu{
 		return !ec;
 	}
 
+	std::string GetParentDirectory(const std::string& path)
+	{
+		return std::filesystem::path(path).parent_path().string();
+	}
+
 	std::string GetFilename(const std::string& path) {
 		return std::filesystem::path{ path }.filename().string();
 	}

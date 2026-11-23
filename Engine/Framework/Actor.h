@@ -49,7 +49,7 @@ namespace nu {
         void SetTransform(const Transform& transform) { m_transform = transform; }
 
         void SetPosition(const glm::vec3 & position) { m_transform.position = position; }
-        void SetRotation(const glm::vec3 rotation) { m_transform.rotation = rotation; }
+        void SetRotation(const glm::vec3 rotation) { m_transform.SetRotation(rotation); }
         void SetScale(const glm::vec3 scale) { m_transform.scale = scale; }
 
 
@@ -57,8 +57,6 @@ namespace nu {
 
         const std::string& GetTag() const { return m_tag; }
         void SetTag(const std::string& tag) { m_tag = tag; }
-
-        float GetRadius() const;
 
         Scene* GetScene() {return m_scene;}
 
@@ -68,6 +66,7 @@ namespace nu {
         bool GetPersistent() const { return m_persistent; }
 
         virtual void Read(const json::value_t& value) override;
+        void UpdateGui() override;
 
         void AddComponent(std::unique_ptr<Component> component);
 

@@ -1,43 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Tilemaps">
-      <UniqueIdentifier>{9489f5e6-0d77-4328-a2ae-0b84c54d5c90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SpaceGame">
-      <UniqueIdentifier>{804ae6f6-1619-48fb-9bea-5b2a906c8bc8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SpriteGame">
-      <UniqueIdentifier>{3d051547-c361-4ee2-9995-4276b572d941}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets">
       <UniqueIdentifier>{9be99544-fcd2-4984-90bc-757ce2f30044}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Scenes">
+      <UniqueIdentifier>{9aa1d6e2-5aad-4b06-ba6b-b4c437585ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Materials">
+      <UniqueIdentifier>{c2850f14-d910-416a-82dd-a64ad0adf153}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Build\Assets\SpaceGame\Tilemaps\world.json">
-      <Filter>Tilemaps</Filter>
+    <None Include="..\Build\Assets\scenes\scene.json">
+      <Filter>Assets\Scenes</Filter>
     </None>
-    <None Include="..\Build\Assets\Animations\bat_idle.json">
-      <Filter>Assets</Filter>
+    <None Include="..\Build\Assets\materials\phong.material.json">
+      <Filter>Assets\Materials</Filter>
     </None>
-    <None Include="..\Build\Assets\SpaceGame\Data\scene.json">
-      <Filter>Assets</Filter>
+    <None Include="..\Build\Assets\materials\ogre.instance.json">
+      <Filter>Assets\Materials</Filter>
     </None>
-    <None Include="..\Build\Assets\SpaceGame\Data\level.json">
-      <Filter>Assets</Filter>
+    <None Include="..\Build\Assets\materials\spot.instance.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\Build\Assets\materials\tavern.instance.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\Build\Assets\materials\flat_plane.instance.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\Build\Assets\materials\ground.instance.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\Build\Assets\materials\multi.material.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\Build\Assets\materials\dandelion.instance.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\Build\Assets\materials\lava.instance.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\Build\Assets\materials\phong_normal.material.json">
+      <Filter>Assets\Materials</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

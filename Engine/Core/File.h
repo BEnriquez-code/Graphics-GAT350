@@ -6,6 +6,7 @@
 namespace nu {
 	std::string GetWorkingDirectory();
 	bool SetWorkingDirectory(const std::string& path);
+	std::string GetParentDirectory(const std::string& path);
 
 	std::string GetFilename(const std::string& path);
 	std::string GetFileExtension(const std::string& path);
