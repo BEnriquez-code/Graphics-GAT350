@@ -12,7 +12,7 @@ int main() {
     Engine::Get().Initialize();
 
 	Scene scene;
-	scene.Load("scenes/scene.json");
+	scene.Load("scenes/scene_skybox.json");
 
     // MAIN LOOP
     bool quit = false;

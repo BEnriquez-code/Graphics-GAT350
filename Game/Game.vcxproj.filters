@@ -57,6 +57,15 @@
     <None Include="..\Build\Assets\scenes\scene_helmet.json">
       <Filter>Assets\Scenes</Filter>
     </None>
+    <None Include="..\Build\Assets\materials\skybox.instance.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\Build\Assets\scenes\scene_skybox.json">
+      <Filter>Assets\Scenes</Filter>
+    </None>
+    <None Include="..\Build\Assets\materials\skybox.material.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

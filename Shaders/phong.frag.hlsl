@@ -1,5 +1,6 @@
 #include "Lighting.hlsli"
 #include "uniforms.hlsli"
+
 Texture2D<float4> base_texture : register(t0, FRAGMENT_TEXTURE_SPACE);
 SamplerState base_sampler : register(s0, FRAGMENT_TEXTURE_SPACE);
 
