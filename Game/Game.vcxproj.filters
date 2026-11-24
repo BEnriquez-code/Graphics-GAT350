@@ -10,6 +10,9 @@
     <Filter Include="Assets\Materials">
       <UniqueIdentifier>{c2850f14-d910-416a-82dd-a64ad0adf153}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Textures">
+      <UniqueIdentifier>{5922a526-f5f8-49df-acea-1782d6325a61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Build\Assets\scenes\scene.json">
@@ -44,6 +47,15 @@
     </None>
     <None Include="..\Build\Assets\materials\phong_normal.material.json">
       <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\Build\Assets\textures\skybox\skybox.cubemap.json">
+      <Filter>Assets\Textures</Filter>
+    </None>
+    <None Include="..\Build\Assets\materials\phong_default.material.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\Build\Assets\scenes\scene_helmet.json">
+      <Filter>Assets\Scenes</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

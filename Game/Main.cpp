@@ -1,24 +1,9 @@
 #include "Engine.h"
 #include "Core/File.h"
-#include "Renderer/Shader.h"
-#include "Renderer/VertexBuffer.h"
-#include "Renderer/IndexBuffer.h"
-#include "Renderer/Pipeline.h"
-#include "Framework/Scene.h"
-#include "Components/CameraComponent.h"
-
-#include "Resources/ResourceManager.h"
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/euler_angles.hpp>
-#include <glm/gtx/transform.hpp>
 
 #define MAX_LIGHTS 8
 
 using namespace nu;
-
 
 int main() {
     // SET DIRECTORY
@@ -28,10 +13,6 @@ int main() {
 
 	Scene scene;
 	scene.Load("scenes/scene.json");
-
-
-    Transform transform;
-    transform.scale = glm::vec3{ 2.0f };
 
     // MAIN LOOP
     bool quit = false;
@@ -51,7 +32,6 @@ int main() {
             }
         }
 
-
         // ENGINE UPDATE (audio, input, time)
         Engine::Get().Update();
 		float time = Engine::Get().GetTime().GetTime();
@@ -68,7 +48,6 @@ int main() {
         Engine::Get().GetEditor().Draw(Engine::Get().GetRenderer());
 
         Engine::Get().GetRenderer().EndFrame();
-
     }
 
     // SHUTDOWN

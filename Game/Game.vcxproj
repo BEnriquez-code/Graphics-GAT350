@@ -190,10 +190,13 @@
     <None Include="..\Build\Assets\materials\multi.material.json" />
     <None Include="..\Build\Assets\materials\ogre.instance.json" />
     <None Include="..\Build\Assets\materials\phong.material.json" />
+    <None Include="..\Build\Assets\materials\phong_default.material.json" />
     <None Include="..\Build\Assets\materials\phong_normal.material.json" />
     <None Include="..\Build\Assets\materials\spot.instance.json" />
     <None Include="..\Build\Assets\materials\tavern.instance.json" />
     <None Include="..\Build\Assets\scenes\scene.json" />
+    <None Include="..\Build\Assets\scenes\scene_helmet.json" />
+    <None Include="..\Build\Assets\textures\skybox\skybox.cubemap.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

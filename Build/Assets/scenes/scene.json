@@ -145,6 +145,21 @@
                     "materials": [ "materials/dandelion.instance.json" ]
                 }
             ]
+        },
+        {
+            "name": "Helmet",
+            "type": "Actor",
+            "transform": {
+                "position": [ 0, 0, 0 ],
+                "rotation": [ 0, 0, 0 ],
+                "scale": [ 2, 2, 2 ]
+            },
+            "components": [
+                {
+                    "type": "ModelComponent",
+                    "model": "models/flight-helmet/FlightHelmet.gltf"
+                }
+            ]
         }
 
     ]
